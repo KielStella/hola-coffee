@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+:root {
+  --background: #FFF8EC;
+  --foreground: #4A3325;
+
+  --hola-blue: #5AA9E6;
+  --hola-blue-dark: #3E8BCB;
+  --hola-yellow: #F8DC6B;
+  --hola-yellow-soft: #FCEBA3;
+  --hola-brown: #4A3325;
+  --hola-brown-soft: #7A5B45;
+  --hola-white: #FFFFFF;
+  --hola-beige: #FFF8EC;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-hola-blue: var(--hola-blue);
+  --color-hola-blue-dark: var(--hola-blue-dark);
+  --color-hola-yellow: var(--hola-yellow);
+  --color-hola-yellow-soft: var(--hola-yellow-soft);
+  --color-hola-brown: var(--hola-brown);
+  --color-hola-brown-soft: var(--hola-brown-soft);
+  --color-hola-white: var(--hola-white);
+  --color-hola-beige: var(--hola-beige);
+
+  --font-display: "Baloo 2", ui-rounded, sans-serif;
+  --font-body: "Inter", ui-sans-serif, sans-serif;
+
+  --radius-hola-sm: 1rem;
+  --radius-hola-md: 1.5rem;
+  --radius-hola-lg: 2.5rem;
+  --radius-hola-xl: 3.5rem;
+}
+
+* {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* Focus states for accessibility */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--hola-blue);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom scrollbar accent */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--hola-beige);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--hola-blue);
+  border-radius: 999px;
+}
+
+.text-gradient-hola {
+  background: linear-gradient(90deg, var(--hola-blue) 0%, var(--hola-blue-dark) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hola-shadow {
+  box-shadow: 0 20px 45px -15px rgba(74, 51, 37, 0.25);
+}
+
+@keyframes hola-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
