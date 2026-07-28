@@ -16,7 +16,6 @@ import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
 
 const siteUrl = "https://holacoffee.ph";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -33,11 +32,14 @@ export const metadata: Metadata = {
       "Freshly brewed coffee, handcrafted drinks, and cozy moments made for everyone at HOLA Coffee.",
     url: siteUrl,
     siteName: "HOLA Coffee",
-<<<<<<< HEAD
-    images: [{ url: "/images/hola-logo.png", width: 1254, height: 1254, alt: "HOLA Coffee logo" }],
-=======
-    images: [{ url: "/images/hola-logo.png", width: 150, height: 150, alt: "HOLA Coffee logo" }],
->>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
+    images: [
+      {
+        url: "/images/hola-logo.png",
+        width: 1254,
+        height: 1254,
+        alt: "HOLA Coffee logo",
+      },
+    ],
     locale: "en_US",
     type: "website",
   },
