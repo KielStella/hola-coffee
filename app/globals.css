@@ -85,6 +85,7 @@ select:focus-visible,
   border-radius: 999px;
 }
 
+<<<<<<< HEAD
 /* Thinner scrollbar on mobile/small viewports, where supported */
 @media (max-width: 768px) {
   html {
@@ -95,6 +96,8 @@ select:focus-visible,
   }
 }
 
+=======
+>>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
 .text-gradient-hola {
   background: linear-gradient(90deg, var(--hola-blue) 0%, var(--hola-blue-dark) 100%);
   -webkit-background-clip: text;
