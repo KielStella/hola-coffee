@@ -48,15 +48,9 @@ export default function Navbar() {
       >
         <nav
           aria-label="Primary"
-<<<<<<< HEAD
           className="mx-auto grid max-w-[1280px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8"
         >
           <div className="hidden items-center gap-6 lg:col-start-1 lg:flex">
-=======
-          className="relative mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8"
-        >
-          <div className="hidden items-center gap-6 lg:flex">
->>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
             {primaryNavLinksLeft.map((link) => (
               <NavItem key={link.href} link={link} />
             ))}
@@ -65,7 +59,6 @@ export default function Navbar() {
           <Link
             href="/"
             aria-label="HOLA Coffee — go to homepage"
-<<<<<<< HEAD
             className="col-start-2 flex shrink-0 items-center justify-self-center"
           >
             <motion.div animate={{ scale: scrolled ? 0.9 : 1 }} transition={{ duration: 0.25 }}>
@@ -76,27 +69,11 @@ export default function Navbar() {
                 height={678}
                 priority
                 className="h-9 w-auto sm:h-10 lg:h-11"
-=======
-            className="absolute left-1/2 top-1/2 flex shrink-0 -translate-x-1/2 -translate-y-1/2 items-center gap-2 lg:left-1/2"
-          >
-            <motion.div animate={{ scale: scrolled ? 0.88 : 1 }} transition={{ duration: 0.25 }}>
-              <Image
-                src="/images/hola-logo.png"
-                alt="HOLA Coffee logo"
-                width={56}
-                height={56}
-                priority
-                className="h-12 w-12 sm:h-14 sm:w-14"
->>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
               />
             </motion.div>
           </Link>
 
-<<<<<<< HEAD
           <div className="hidden items-center justify-self-end gap-6 lg:col-start-3 lg:flex">
-=======
-          <div className="ml-auto hidden items-center gap-6 lg:flex">
->>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
             {primaryNavLinksRight.map((link) => (
               <NavItem key={link.href} link={link} />
             ))}
@@ -110,11 +87,7 @@ export default function Navbar() {
             </button>
           </div>
 
-<<<<<<< HEAD
           <div className="col-start-3 flex items-center justify-self-end gap-2 lg:hidden">
-=======
-          <div className="ml-auto flex items-center gap-2 lg:hidden">
->>>>>>> e89c3aef8b7514c299a463e4bd9c7c4f92ee3346
             <button
               onClick={() => setSearchOpen(true)}
               aria-label="Search"
