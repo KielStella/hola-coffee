@@ -91,7 +91,7 @@ export default function DashboardShell({
         </header>
 
         {mobileOpen && (
-          <div className="fixed inset-0 z-[200] flex lg:hidden">
+          <div className="fixed inset-0 z-200 flex lg:hidden">
             <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
             <div className="relative flex w-72 flex-col bg-hola-brown text-white">
               <div className="flex items-center justify-between px-5 py-5">

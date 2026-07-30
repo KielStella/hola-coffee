@@ -41,53 +41,18 @@ export async function createOrder(input: CreateOrderInput) {
   const session = await auth();
 
   const productIds = [...new Set(parsed.items.map((i) => i.productId))];
-  const products = await prisma.product.findMany({
-    where: { id: { in: productIds } },
-    select: {
-      id: true,
-      name: true,
-      basePrice: true,
-      isAvailable: true,
-    },
-  }) as Array<{
-    id: string;
-    name: string;
-    basePrice: number;
-    isAvailable: boolean;
-  }>;
-  const productMap = new Map<string, {
-    id: string;
-    name: string;
-    basePrice: number;
-    isAvailable: boolean;
-  }>(products.map((p) => [p.id, p]));
+  const products = await prisma.product.findMany({ where: { id: { in: productIds } } });
+  const productMap = new Map(products.map((p) => [p.id, p]));
 
   let subtotal = 0;
-  const itemsData: {
-    productId: string;
-    productName: string;
-    size: "SMALL" | "MEDIUM" | "LARGE";
-    sweetness: "ORIGINAL" | "LESS_SWEET" | "SWEETER";
-    instructions?: string;
-    quantity: number;
-    unitPrice: number;
-  }[] = [];
-
-  for (const item of parsed.items) {
+  const itemsData = parsed.items.map((item) => {
     const product = productMap.get(item.productId);
-
-    if (!product) {
-      console.error("Missing product:", item.productId);
-      continue;
-    }
-
-    if (!product.isAvailable) {
-      throw new Error(`\"${product.name}\" is currently unavailable.`);
+    if (!product || !product.isAvailable) {
+      throw new Error(`"${product?.name ?? item.productId}" is currently unavailable.`);
     }
     const unitPrice = product.basePrice + sizeAdjustment[item.size];
     subtotal += unitPrice * item.quantity;
-
-    itemsData.push({
+    return {
       productId: product.id,
       productName: product.name,
       size: item.size,
@@ -95,8 +60,8 @@ export async function createOrder(input: CreateOrderInput) {
       instructions: item.instructions,
       quantity: item.quantity,
       unitPrice,
-    });
-  }
+    };
+  });
 
   const order = await prisma.order.create({
     data: {
@@ -173,7 +138,7 @@ export async function updateOrderStatus(
     const multiplier = settings?.pointsMultiplier ?? 1;
     const pointsEarned = Math.round(pointsPerOrder * multiplier);
 
-    await prisma.$transaction(async (tx: { user: { update: (arg0: { where: { id: any; }; data: { points: { increment: number; }; ordersCompleted: { increment: number; }; }; }) => any; }; order: { update: (arg0: { where: { id: string; }; data: { pointsAwarded: number; }; }) => any; }; pointsHistory: { create: (arg0: { data: { userId: any; orderId: any; pointsEarned: number; runningTotal: any; }; }) => any; }; }) => {
+    await prisma.$transaction(async (tx) => {
       const user = await tx.user.update({
         where: { id: order.userId! },
         data: {

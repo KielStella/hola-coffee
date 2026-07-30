@@ -35,7 +35,7 @@ export default function CartDrawer() {
     <AnimatePresence>
       {isDrawerOpen && (
         <motion.div
-          className="fixed inset-0 z-[120] flex justify-end bg-hola-brown/40 backdrop-blur-sm"
+          className="fixed inset-0 z-120 flex justify-end bg-hola-brown/40 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

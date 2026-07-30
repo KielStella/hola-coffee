@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function StaffPage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
+      <section className="relative overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
         <FloatingDecor variant="bubbles" />
         <div className="relative mx-auto max-w-2xl">
           <AnimatedSection>
@@ -30,7 +30,7 @@ export default function StaffPage() {
       </section>
 
       <section className="bg-white px-4 py-20 sm:py-28">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="mx-auto max-w-7xl">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {staffMembers.map((member, i) => (
               <AnimatedSection key={member.id} delay={i * 0.1}>

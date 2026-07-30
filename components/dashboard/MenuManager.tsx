@@ -178,9 +178,11 @@ export default function MenuManager({ categories, products }: { categories: Cate
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() => startTransition(async () => {
-                    await toggleProductAvailability(product.id, !product.isAvailable);
-                  })}
+                  onClick={() =>
+                    startTransition(() => {
+                      void toggleProductAvailability(product.id, !product.isAvailable);
+                    })
+                  }
                   className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
                 >
                   {product.isAvailable ? "Mark Sold Out" : "Mark Available"}
@@ -192,9 +194,11 @@ export default function MenuManager({ categories, products }: { categories: Cate
                   Edit
                 </button>
                 <button
-                  onClick={() => startTransition(async () => {
-                    await deleteProduct(product.id);
-                  })}
+                  onClick={() =>
+                    startTransition(() => {
+                      void deleteProduct(product.id);
+                    })
+                  }
                   className="rounded-full border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
                 >
                   Delete

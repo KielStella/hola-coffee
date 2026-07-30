@@ -6,7 +6,7 @@ import { featuredProducts } from "@/lib/data";
 export default function FeaturedSection() {
   return (
     <section className="relative bg-white px-4 py-20 sm:py-28">
-      <div className="mx-auto max-w-[1280px]">
+      <div className="mx-auto max-w-7xl">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl text-hola-brown sm:text-4xl">Customer Favorites</h2>
           <p className="mt-3 text-hola-brown-soft">Discover our best-selling handcrafted drinks.</p>

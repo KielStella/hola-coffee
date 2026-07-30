@@ -1,6 +1,6 @@
 "use client";
 
-import { JSXElementConstructor, Key, ReactElement, ReactNode, ReactPortal, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { CheckCircle2, XCircle, RotateCcw } from "lucide-react";
 import QrScanner from "./QrScanner";
 import { getOrderByQrToken, updateOrderStatus } from "@/actions/orders";
@@ -61,10 +61,10 @@ export default function ScannerPanel() {
           <p className="text-sm text-hola-brown-soft">{result.data.user?.name ?? result.data.guestName ?? "Guest"}</p>
 
           <ul className="mt-4 space-y-2 text-sm">
-            {result.data.items.map((item: { id: Key; productName: string; quantity: number; size?: string; sweetness?: string; unitPrice: number }) => (
+            {result.data.items.map((item) => (
               <li key={item.id} className="flex justify-between rounded-hola-sm bg-hola-beige px-3 py-2">
                 <span>
-                  {item.productName} × {item.quantity} ({item.size ?? ""}{item.size && item.sweetness ? ", " : ""}{item.sweetness ?? ""})
+                  {item.productName} × {item.quantity} ({item.size}, {item.sweetness})
                 </span>
                 <span className="font-display text-hola-blue-dark">₱{item.unitPrice * item.quantity}</span>
               </li>

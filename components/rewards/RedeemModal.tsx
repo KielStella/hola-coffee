@@ -41,7 +41,7 @@ export default function RedeemModal({
     <AnimatePresence>
       {reward && (
         <motion.div
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-110 flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

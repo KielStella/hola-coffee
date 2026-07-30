@@ -60,18 +60,6 @@ type CartContextValue = {
 
 const CartContext = createContext<CartContextValue | null>(null);
 
-const sizeOptionToBackend: Record<SizeOption, "SMALL" | "MEDIUM" | "LARGE"> = {
-  Small: "SMALL",
-  Medium: "MEDIUM",
-  Large: "LARGE",
-};
-
-const sweetnessOptionToBackend: Record<SweetnessOption, "ORIGINAL" | "LESS_SWEET" | "SWEETER"> = {
-  Original: "ORIGINAL",
-  "Less Sweet": "LESS_SWEET",
-  Sweeter: "SWEETER",
-};
-
 function makeId() {
   return Math.random().toString(36).slice(2, 10);
 }
@@ -141,8 +129,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const dbOrder = await createOrder({
         items: items.map((item) => ({
           productId: item.productId,
-          size: sizeOptionToBackend[item.size],
-          sweetness: sweetnessOptionToBackend[item.sweetness],
+          // map local SizeOption / SweetnessOption to backend enum values
+          size:
+            item.size === "Small"
+              ? "SMALL"
+              : item.size === "Medium"
+              ? "MEDIUM"
+              : "LARGE",
+          sweetness:
+            item.sweetness === "Original"
+              ? "ORIGINAL"
+              : item.sweetness === "Less Sweet"
+              ? "LESS_SWEET"
+              : "SWEETER",
           instructions: item.instructions,
           quantity: item.quantity,
         })),

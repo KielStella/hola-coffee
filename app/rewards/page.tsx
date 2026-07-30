@@ -31,7 +31,7 @@ export default function RewardsPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-hola-blue-dark to-hola-blue px-4 py-16 text-center text-white sm:py-24">
+      <section className="relative overflow-hidden bg-linear-to-br from-hola-blue-dark to-hola-blue px-4 py-16 text-center text-white sm:py-24">
         <FloatingDecor variant="bubbles" />
         <div className="relative mx-auto max-w-2xl">
           <AnimatedSection>
@@ -82,7 +82,7 @@ export default function RewardsPage() {
           </div>
           <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-hola-beige">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-hola-blue to-hola-yellow transition-all duration-700"
+              className="h-full rounded-full bg-linear-to-r from-hola-blue to-hola-yellow transition-all duration-700"
               style={{ width: `${nextRewardProgress}%` }}
             />
           </div>
@@ -90,7 +90,7 @@ export default function RewardsPage() {
       </section>
 
       <section className="bg-white px-4 py-16 sm:py-20">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="mx-auto max-w-7xl">
           <AnimatedSection className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl text-hola-brown sm:text-4xl">Redeem a Reward</h2>
             <p className="mt-3 text-hola-brown-soft">Browse by category and redeem when you&apos;re ready.</p>
