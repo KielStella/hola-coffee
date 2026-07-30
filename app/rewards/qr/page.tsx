@@ -41,12 +41,16 @@ export default function RewardQrPage() {
 
   const msRemaining = activeRewardQr.expiresAt - now;
   const expired = msRemaining <= 0;
+<<<<<<< HEAD
   const qrPayload = JSON.stringify({
     type: "reward",
     rewardId: activeRewardQr.rewardId,
     points: activeRewardQr.points,
     expiresAt: activeRewardQr.expiresAt,
   });
+=======
+  const qrPayload = activeRewardQr.qrToken;
+>>>>>>> c71a751 (Initial commit)
 
   return (
     <section className="bg-hola-beige px-4 py-14 sm:py-20">

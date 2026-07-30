@@ -22,9 +22,15 @@ export default function RedeemModal({
 
   const remaining = points - reward.points;
 
+<<<<<<< HEAD
   function handleConfirmRedeem() {
     if (!reward) return;
     const success = redeemReward(reward.id);
+=======
+  async function handleConfirmRedeem() {
+    if (!reward) return;
+    const success = await redeemReward(reward.id);
+>>>>>>> c71a751 (Initial commit)
     if (success) {
       confetti({
         particleCount: 120,

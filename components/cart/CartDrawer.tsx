@@ -1,5 +1,9 @@
 "use client";
 
+<<<<<<< HEAD
+=======
+import { useTransition } from "react";
+>>>>>>> c71a751 (Initial commit)
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { X, Plus, Minus, Trash2, ShoppingBag, QrCode, Info } from "lucide-react";
@@ -9,6 +13,10 @@ import { getProductById } from "@/lib/menu-data";
 
 export default function CartDrawer() {
   const router = useRouter();
+<<<<<<< HEAD
+=======
+  const [isGenerating, startGenerating] = useTransition();
+>>>>>>> c71a751 (Initial commit)
   const {
     items,
     subtotal,
@@ -21,10 +29,19 @@ export default function CartDrawer() {
   } = useCart();
 
   function handleGenerateOrder() {
+<<<<<<< HEAD
     const order = generateOrder();
     if (order) {
       router.push("/order/qr");
     }
+=======
+    startGenerating(async () => {
+      const order = await generateOrder();
+      if (order) {
+        router.push("/order/qr");
+      }
+    });
+>>>>>>> c71a751 (Initial commit)
   }
 
   return (
@@ -169,9 +186,16 @@ export default function CartDrawer() {
                 <div className="mt-4 flex flex-col gap-3">
                   <button
                     onClick={handleGenerateOrder}
+<<<<<<< HEAD
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-hola-blue px-6 py-3.5 font-display text-white shadow-lg shadow-hola-blue/30 transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl"
                   >
                     <QrCode className="h-5 w-5" /> Generate QR Order
+=======
+                    disabled={isGenerating}
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-hola-blue px-6 py-3.5 font-display text-white shadow-lg shadow-hola-blue/30 transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <QrCode className="h-5 w-5" /> {isGenerating ? "Placing Order…" : "Generate QR Order"}
+>>>>>>> c71a751 (Initial commit)
                   </button>
                   <button
                     onClick={closeDrawer}

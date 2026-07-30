@@ -31,6 +31,10 @@ export type OrderSnapshot = {
   createdAt: string;
   items: CartItem[];
   total: number;
+<<<<<<< HEAD
+=======
+  qrToken: string;
+>>>>>>> c71a751 (Initial commit)
 };
 
 type AddItemInput = {
@@ -54,7 +58,11 @@ type CartContextValue = {
   openDrawer: () => void;
   closeDrawer: () => void;
   lastOrder: OrderSnapshot | null;
+<<<<<<< HEAD
   generateOrder: () => OrderSnapshot | null;
+=======
+  generateOrder: () => Promise<OrderSnapshot | null>;
+>>>>>>> c71a751 (Initial commit)
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -120,6 +128,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
+<<<<<<< HEAD
   const generateOrder = useCallback((): OrderSnapshot | null => {
     if (items.length === 0) return null;
     const order: OrderSnapshot = {
@@ -132,6 +141,50 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems([]);
     setDrawerOpen(false);
     return order;
+=======
+  const generateOrder = useCallback(async (): Promise<OrderSnapshot | null> => {
+    if (items.length === 0) return null;
+
+    try {
+      const { createOrder } = await import("@/actions/orders");
+      const dbOrder = await createOrder({
+        items: items.map((item) => ({
+          productId: item.productId,
+          size: item.size,
+          sweetness: item.sweetness,
+          instructions: item.instructions,
+          quantity: item.quantity,
+        })),
+      });
+
+      const order: OrderSnapshot = {
+        orderNumber: dbOrder.orderNumber,
+        createdAt: dbOrder.createdAt.toISOString(),
+        items,
+        total: dbOrder.total,
+        qrToken: dbOrder.qrToken,
+      };
+      setLastOrder(order);
+      setItems([]);
+      setDrawerOpen(false);
+      return order;
+    } catch (error) {
+      // Backend unavailable (e.g. database not yet configured) — fall back to a
+      // local-only order ticket so the ordering UX still works end-to-end.
+      console.error("[cart] createOrder failed, falling back to local order:", error);
+      const order: OrderSnapshot = {
+        orderNumber: `HOLA-${Math.floor(100000 + Math.random() * 899999)}`,
+        createdAt: new Date().toISOString(),
+        items,
+        total: subtotal,
+        qrToken: makeId(),
+      };
+      setLastOrder(order);
+      setItems([]);
+      setDrawerOpen(false);
+      return order;
+    }
+>>>>>>> c71a751 (Initial commit)
   }, [items, subtotal]);
 
   const value: CartContextValue = {

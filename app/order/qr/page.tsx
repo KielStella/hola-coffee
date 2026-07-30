@@ -40,11 +40,15 @@ export default function OrderQrPage() {
 
   const order = lastOrder;
   const { date, time } = formatDateTime(order.createdAt);
+<<<<<<< HEAD
   const qrPayload = JSON.stringify({
     orderNumber: order.orderNumber,
     total: order.total,
     items: order.items.length,
   });
+=======
+  const qrPayload = order.qrToken;
+>>>>>>> c71a751 (Initial commit)
 
   function downloadAsSvg() {
     const svg = qrWrapperRef.current?.querySelector("svg");

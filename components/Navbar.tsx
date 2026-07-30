@@ -7,6 +7,10 @@ import { motion } from "framer-motion";
 import { Search, Menu, X } from "lucide-react";
 import { primaryNavLinksLeft, primaryNavLinksRight, type NavLink } from "@/lib/data";
 import SearchOverlay from "./SearchOverlay";
+<<<<<<< HEAD
+=======
+import AccountMenu from "./auth/AccountMenu";
+>>>>>>> c71a751 (Initial commit)
 
 function NavItem({ link }: { link: NavLink }) {
   return (
@@ -85,6 +89,10 @@ export default function Navbar() {
             >
               <Search className="h-5 w-5" />
             </button>
+<<<<<<< HEAD
+=======
+            <AccountMenu />
+>>>>>>> c71a751 (Initial commit)
           </div>
 
           <div className="col-start-3 flex items-center justify-self-end gap-2 lg:hidden">
@@ -95,6 +103,10 @@ export default function Navbar() {
             >
               <Search className="h-5 w-5" />
             </button>
+<<<<<<< HEAD
+=======
+            <AccountMenu />
+>>>>>>> c71a751 (Initial commit)
             <button
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? "Close menu" : "Open menu"}
