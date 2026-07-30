@@ -22,15 +22,9 @@ export default function RedeemModal({
 
   const remaining = points - reward.points;
 
-<<<<<<< HEAD
-  function handleConfirmRedeem() {
-    if (!reward) return;
-    const success = redeemReward(reward.id);
-=======
   async function handleConfirmRedeem() {
     if (!reward) return;
     const success = await redeemReward(reward.id);
->>>>>>> c71a751 (Initial commit)
     if (success) {
       confetti({
         particleCount: 120,
@@ -47,7 +41,7 @@ export default function RedeemModal({
     <AnimatePresence>
       {reward && (
         <motion.div
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-110 flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

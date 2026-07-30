@@ -37,7 +37,7 @@ export default function RewardArt({
     <div
       role="img"
       aria-label={name}
-      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${gradient} ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden bg-linear-to-br ${gradient} ${className}`}
     >
       <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/15" />
       <div className="absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-white/10" />
