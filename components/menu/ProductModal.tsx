@@ -56,7 +56,7 @@ export default function ProductModal({
     <AnimatePresence>
       {product && (
         <motion.div
-          className="fixed inset-0 z-[110] flex items-end justify-center bg-hola-brown/50 backdrop-blur-sm sm:items-center sm:p-4"
+          className="fixed inset-0 z-110 flex items-end justify-center bg-hola-brown/50 backdrop-blur-sm sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

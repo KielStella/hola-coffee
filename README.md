@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-# HOLA Coffee — Website (Prompt 1A + 1B + 1C)
-
-Brewing Happiness One Cup at a Time.
-
-This is the customer-facing frontend for HOLA Coffee, built with Next.js App Router, TypeScript, Tailwind CSS, and Framer Motion.
-=======
 # HOLA Coffee — Website (Prompt 1A + 1B + 1C + Prompt 2)
 
 Brewing Happiness One Cup at a Time.
 
 A full café ordering & loyalty platform built with Next.js App Router, TypeScript, Tailwind CSS, Framer Motion, Prisma, PostgreSQL, and Auth.js.
->>>>>>> c71a751 (Initial commit)
 
 ## What's included (Prompt 1A scope)
 
@@ -19,11 +11,7 @@ A full café ordering & loyalty platform built with Next.js App Router, TypeScri
 - Homepage: hero, Why Choose HOLA, Customer Favorites, Rewards preview
 - Our Story page: mission, vision, philosophy, animated timeline
 - Staff page: team cards
-<<<<<<< HEAD
-- Contact Us page: validated form (frontend only), business info, map embed
-=======
 - Contact Us page: validated form, business info, map embed
->>>>>>> c71a751 (Initial commit)
 - Footer, custom 404, robots.txt, sitemap.xml, JSON-LD structured data
 - Framer Motion animations: fades, slides, floating beans/bubbles, card lift, navbar shrink, scroll-triggered reveals
 - Accessible: skip link, focus-visible states, semantic headings, ARIA labels, reduced-motion support
@@ -33,21 +21,6 @@ A full café ordering & loyalty platform built with Next.js App Router, TypeScri
 - Full **Menu** page (`/menu`) — 6 sticky category tabs (Coffee, Iced Coffee, Non Coffee, Frappes, Pastries, Desserts), ~19 products with NEW / BEST SELLER / SOLD OUT tags (NEW always sorts first; SOLD OUT dims the image and disables ordering)
 - **Product details modal** — image, description, ingredients, required HOLA Size (Small/Medium/Large, price-adjusted), required Sweetness Preference, optional Special Instructions, quantity stepper, live total, Add to Order / Continue Shopping
 - **Global cart** (`lib/cart-context.tsx`) — floating cart button (top-right on desktop, bottom-right FAB on mobile) with live item count, slide-in cart drawer showing every item's size/sweetness/instructions/quantity/subtotal, quantity +/-, remove, empty-cart state, and the required Self Pickup Only notice
-<<<<<<< HEAD
-- **QR order flow** (`/order/qr`) — "Generate QR Order" snapshots the cart into an order ticket with a real scannable QR code, order number, date/time, itemized products, estimated total, self-pickup reminder, and Download QR (SVG) / Save QR (PNG) actions. This QR is a frontend-only order ticket, not a payment system.
-- **Order status tracking** (`/order/status`) — read-only progress bar across Pending → Confirmed → Preparing → Ready for Pickup → Completed, plus estimated wait time and order summary
-- Global search now indexes the full menu catalog, not just homepage highlights
-- Micro-animations throughout: cart drawer slide-in, modal fade/slide, card lift, button hover, ripple-style scale on cart badge
-
-## What's included (Prompt 1C scope)
-
-- **Full HOLA Rewards dashboard** (`/rewards`) — animated circular points indicator, Current Tier / Points / Rewards Redeemed / Orders Completed stat cards, "Next Reward" progress bar with points-needed counter, category filter tabs (Coffee, Non Coffee, Pastries, Desserts, Merchandise, Limited Edition), 14 reward items with Popular/Limited badges
-- **Redeem flow** — confirmation modal (reward details, current/required/remaining points), confetti celebration on successful redemption, then a **Reward QR preview** (`/rewards/qr`) with a real scannable QR, a live 30-minute expiration countdown, and an expired state
-- **Reward History** (`/rewards/history`) and **Points History** (`/rewards/points`) pages, both frontend-only with seeded demo data and proper empty states
-- **Homepage additions**: Promotions section, Testimonials (with star ratings), Instagram-style Gallery with lightbox preview, FAQ accordion, and a Newsletter signup — all with scroll-triggered animation and empty states; Gallery/Testimonials also demonstrate loading skeletons (`components/Skeleton.tsx`)
-- Loyalty state lives in `lib/loyalty-context.tsx` (frontend-only, seeded with a demo customer at 245 points) — ready to swap for real backend calls in Prompt 2
-- Search index now includes the full 14-item rewards catalog
-=======
 - **QR order flow** (`/order/qr`) — "Generate QR Order" now creates a real `Order` row (see Prompt 2 below) and displays a scannable QR encoding its token, order number, date/time, itemized products, estimated total, self-pickup reminder, and Download QR (SVG) / Save QR (PNG) actions
 - **Order status tracking** (`/order/status`) — progress bar across Pending → Confirmed → Preparing → Ready for Pickup → Completed
 - Global search indexes the full menu catalog
@@ -88,20 +61,10 @@ A full café ordering & loyalty platform built with Next.js App Router, TypeScri
 - Reward points are **reserved** at redemption time but only actually **deducted** when staff approves the scanned Reward QR — also per your spec
 - Every admin/staff action writes an `ActivityLog` entry
 - Contact form now saves to the database and emails both the customer (confirmation) and the business (notification) via Gmail SMTP
->>>>>>> c71a751 (Initial commit)
 
 ## Getting started
 
 ```bash
-<<<<<<< HEAD
-npm install
-npm run dev
-```
-
-Visit http://localhost:3000.
-
-## Production build
-=======
 npm install          # also runs `prisma generate` via postinstall
 cp .env.example .env # fill in your DATABASE_URL at minimum
 npx prisma migrate dev --name init
@@ -118,22 +81,12 @@ Visit http://localhost:3000. Seeded logins (from `npm run db:seed`):
 | Customer | customer@example.com     | Customer123!    |
 
 ## Production build & deploy
->>>>>>> c71a751 (Initial commit)
 
 ```bash
 npm run build
 npm run start
 ```
 
-<<<<<<< HEAD
-## Notes for future prompts
-
-- No backend, auth, database, or admin/staff dashboards are implemented yet — those arrive in Prompt 2. The cart, QR order, order status, and loyalty/rewards pages all currently run on in-memory React state (`lib/cart-context.tsx`, `lib/loyalty-context.tsx`), so orders and redemptions reset on a full page reload — this is expected and will be wired to persistent storage in Prompt 2.
-- Product, staff, and reward "photos" currently use brand-styled icon illustrations (no real photography was supplied yet). Swap them for real photos in `lib/data.ts` / `lib/menu-data.ts` and the relevant components once available.
-- Social icons (`components/SocialIcons.tsx`) are generic glyphs, not brand assets.
-- This build uses self-hosted `@fontsource` packages for Baloo 2 / Inter rather than `next/font/google`, since it was created in a sandboxed environment without access to Google Fonts. Both approaches work fine on Vercel; feel free to switch to `next/font/google` if preferred.
-- QR codes are generated client-side with `react-qr-code` and encode the order number/total/item count as a JSON payload — Prompt 2's QR Scanner will need to parse this same shape (or a superset of it) against the database.
-=======
 On Vercel: set the environment variables from `.env.example`, then Vercel will run `npm install` (triggering `prisma generate`) and `npm run build` automatically. Run `npx prisma migrate deploy` once against your production database (Neon, Supabase, or Vercel Postgres all work) before or during your first deploy, then `npm run db:seed` if you want the demo data.
 
 ## ⚠️ Important: how this backend was verified (please read)
@@ -155,5 +108,4 @@ What I could **not** do in that environment is get a green `npm run build` again
 - This build uses self-hosted `@fontsource` packages for Baloo 2 / Inter rather than `next/font/google` (sandbox couldn't reach Google Fonts). Both work fine on Vercel.
 - Deeper admin features from the original spec that are intentionally left for a follow-up pass: CSV exports under Reports, a dedicated visual editor for Our Story/Gallery/Promotions content (currently editable directly via the Reward/Menu-style CRUD pattern would need to be extended, or via Prisma Studio: `npm run db:studio`), and PWA install/offline support.
 - `middleware.ts` intentionally matches `/admin/:path*`, `/staff-portal/:path*`, and `/account/:path*` only — the public marketing pages from Prompts 1A–1C are untouched and remain fully public.
->>>>>>> c71a751 (Initial commit)
 

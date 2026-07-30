@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
+      <section className="relative overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
         <FloatingDecor variant="beans" />
         <div className="relative mx-auto max-w-2xl">
           <AnimatedSection>
@@ -33,7 +33,7 @@ export default function ContactPage() {
       </section>
 
       <section className="bg-white px-4 py-16 sm:py-24">
-        <div className="mx-auto grid max-w-[1280px] gap-10 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-5">
           <AnimatedSection direction="left" className="lg:col-span-3">
             <ContactForm />
           </AnimatedSection>

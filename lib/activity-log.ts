@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { Prisma } from "@prisma/client";
 
 export async function logActivity({
   userId,
@@ -11,7 +12,7 @@ export async function logActivity({
   action: string;
   entity?: string;
   entityId?: string;
-  metadata?: Record<string, unknown>;
+  metadata?: Prisma.InputJsonValue;
 }) {
   try {
     await prisma.activityLog.create({
@@ -20,7 +21,7 @@ export async function logActivity({
         action,
         entity,
         entityId,
-        metadata,
+        metadata: metadata ?? undefined,
       },
     });
   } catch (error) {

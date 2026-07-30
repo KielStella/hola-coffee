@@ -8,10 +8,10 @@ import FloatingDecor from "./FloatingDecor";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-hola-blue/15 via-hola-blue/5 to-hola-beige px-4 pb-24 pt-16 sm:pb-32 sm:pt-20">
+    <section className="relative overflow-hidden bg-linear-to-b from-hola-blue/15 via-hola-blue/5 to-hola-beige px-4 pb-24 pt-16 sm:pb-32 sm:pt-20">
       <FloatingDecor />
 
-      <div className="relative mx-auto flex max-w-[1280px] flex-col items-center px-2 text-center">
+      <div className="relative mx-auto flex max-w-7xl flex-col items-center px-2 text-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.85 }}
           animate={{ opacity: 1, scale: 1 }}

@@ -115,7 +115,7 @@ export default function StaffManager({ staff }: { staff: Staff[] }) {
                 Reset Password
               </button>
               <button
-                onClick={() => startTransition(() => deactivateStaffAccount(s.id, !s.isActive))}
+                onClick={() => startTransition(() => void deactivateStaffAccount(s.id, !s.isActive))}
                 className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
               >
                 {s.isActive ? "Deactivate" : "Reactivate"}

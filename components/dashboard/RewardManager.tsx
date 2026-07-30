@@ -146,7 +146,7 @@ export default function RewardManager({ rewards }: { rewards: Reward[] }) {
                   Edit
                 </button>
                 <button
-                  onClick={() => startTransition(() => deleteReward(reward.id))}
+                  onClick={() => startTransition(() => void deleteReward(reward.id))}
                   className="rounded-full border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
                 >
                   Delete

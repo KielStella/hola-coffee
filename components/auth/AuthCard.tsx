@@ -15,7 +15,7 @@ export default function AuthCard({
   footer?: ReactNode;
 }) {
   return (
-    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-16">
+    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-16">
       <FloatingDecor variant="bubbles" />
       <div className="hola-shadow relative w-full max-w-md rounded-hola-lg bg-white p-8 sm:p-10">
         <div className="text-center">

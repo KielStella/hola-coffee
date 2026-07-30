@@ -100,7 +100,7 @@ export default async function AdminDashboardPage() {
       <div className="mt-8 rounded-hola-lg bg-white p-5 shadow-sm">
         <h2 className="font-display text-lg text-hola-brown">Recent Orders</h2>
         <div className="mt-4 overflow-x-auto">
-          <table className="w-full min-w-[500px] text-left text-sm">
+          <table className="w-full min-w-125 text-left text-sm">
             <thead>
               <tr className="text-xs uppercase tracking-wide text-hola-brown-soft">
                 <th className="pb-2">Order</th>

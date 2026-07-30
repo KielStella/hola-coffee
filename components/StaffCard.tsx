@@ -4,7 +4,7 @@ import type { StaffMember } from "@/lib/data";
 export default function StaffCard({ member }: { member: StaffMember }) {
   return (
     <div className="group h-full rounded-hola-lg bg-white p-8 text-center shadow-md transition duration-300 hover:-translate-y-2 hover:shadow-xl">
-      <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-hola-blue to-hola-blue-dark text-2xl font-display text-white shadow-inner">
+      <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-hola-blue to-hola-blue-dark text-2xl font-display text-white shadow-inner">
         {member.initials}
       </div>
       <h3 className="mt-5 text-xl text-hola-brown">{member.name}</h3>

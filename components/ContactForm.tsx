@@ -6,10 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { Send, CheckCircle2 } from "lucide-react";
-<<<<<<< HEAD
-=======
 import { submitContactMessage } from "@/actions/contact";
->>>>>>> c71a751 (Initial commit)
 
 const contactSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
@@ -26,10 +23,7 @@ const inputClass =
 
 export default function ContactForm() {
   const [submitted, setSubmitted] = useState(false);
-<<<<<<< HEAD
-=======
   const [serverError, setServerError] = useState<string | null>(null);
->>>>>>> c71a751 (Initial commit)
   const {
     register,
     handleSubmit,
@@ -37,11 +31,6 @@ export default function ContactForm() {
     formState: { errors, isSubmitting },
   } = useForm<ContactValues>({ resolver: zodResolver(contactSchema) });
 
-<<<<<<< HEAD
-  async function onSubmit() {
-    // Frontend-only: backend wiring for storing/sending messages arrives in Prompt 2.
-    await new Promise((resolve) => setTimeout(resolve, 600));
-=======
   async function onSubmit(data: ContactValues) {
     const result = await submitContactMessage(data);
     if (!result.success) {
@@ -49,7 +38,6 @@ export default function ContactForm() {
       return;
     }
     setServerError(null);
->>>>>>> c71a751 (Initial commit)
     setSubmitted(true);
     reset();
   }
@@ -160,15 +148,12 @@ export default function ContactForm() {
         )}
       </div>
 
-<<<<<<< HEAD
-=======
       {serverError && (
         <p className="rounded-hola-sm bg-red-50 px-3 py-2 text-sm text-red-600" role="alert">
           {serverError}
         </p>
       )}
 
->>>>>>> c71a751 (Initial commit)
       <button
         type="submit"
         disabled={isSubmitting}

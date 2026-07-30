@@ -31,10 +31,7 @@ export type OrderSnapshot = {
   createdAt: string;
   items: CartItem[];
   total: number;
-<<<<<<< HEAD
-=======
   qrToken: string;
->>>>>>> c71a751 (Initial commit)
 };
 
 type AddItemInput = {
@@ -58,11 +55,7 @@ type CartContextValue = {
   openDrawer: () => void;
   closeDrawer: () => void;
   lastOrder: OrderSnapshot | null;
-<<<<<<< HEAD
-  generateOrder: () => OrderSnapshot | null;
-=======
   generateOrder: () => Promise<OrderSnapshot | null>;
->>>>>>> c71a751 (Initial commit)
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -128,20 +121,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const itemCount = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
 
-<<<<<<< HEAD
-  const generateOrder = useCallback((): OrderSnapshot | null => {
-    if (items.length === 0) return null;
-    const order: OrderSnapshot = {
-      orderNumber: `HOLA-${Math.floor(100000 + Math.random() * 899999)}`,
-      createdAt: new Date().toISOString(),
-      items,
-      total: subtotal,
-    };
-    setLastOrder(order);
-    setItems([]);
-    setDrawerOpen(false);
-    return order;
-=======
   const generateOrder = useCallback(async (): Promise<OrderSnapshot | null> => {
     if (items.length === 0) return null;
 
@@ -150,8 +129,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const dbOrder = await createOrder({
         items: items.map((item) => ({
           productId: item.productId,
-          size: item.size,
-          sweetness: item.sweetness,
+          // map local SizeOption / SweetnessOption to backend enum values
+          size:
+            item.size === "Small"
+              ? "SMALL"
+              : item.size === "Medium"
+              ? "MEDIUM"
+              : "LARGE",
+          sweetness:
+            item.sweetness === "Original"
+              ? "ORIGINAL"
+              : item.sweetness === "Less Sweet"
+              ? "LESS_SWEET"
+              : "SWEETER",
           instructions: item.instructions,
           quantity: item.quantity,
         })),
@@ -184,7 +174,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       setDrawerOpen(false);
       return order;
     }
->>>>>>> c71a751 (Initial commit)
   }, [items, subtotal]);
 
   const value: CartContextValue = {

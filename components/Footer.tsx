@@ -15,7 +15,7 @@ const quickLinks = [
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-hola-brown text-hola-beige">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <Link href="/" className="flex items-center gap-2">
             <Image

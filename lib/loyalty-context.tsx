@@ -36,10 +36,7 @@ export type ActiveRewardQr = {
   points: number;
   generatedAt: number;
   expiresAt: number;
-<<<<<<< HEAD
-=======
   qrToken: string;
->>>>>>> c71a751 (Initial commit)
 };
 
 const STARTING_POINTS = 245;
@@ -78,11 +75,7 @@ type LoyaltyContextValue = {
   nextRewardTarget: number;
   nextRewardName: string;
   activeRewardQr: ActiveRewardQr | null;
-<<<<<<< HEAD
-  redeemReward: (rewardId: string) => boolean;
-=======
   redeemReward: (rewardId: string) => Promise<boolean>;
->>>>>>> c71a751 (Initial commit)
   clearActiveRewardQr: () => void;
 };
 
@@ -96,33 +89,6 @@ export function LoyaltyProvider({ children }: { children: ReactNode }) {
   const [activeRewardQr, setActiveRewardQr] = useState<ActiveRewardQr | null>(null);
 
   const redeemReward = useCallback(
-<<<<<<< HEAD
-    (rewardId: string) => {
-      const reward = getRewardById(rewardId);
-      if (!reward || points < reward.points) return false;
-
-      setPoints((p) => p - reward.points);
-      const now = Date.now();
-      setActiveRewardQr({
-        rewardId: reward.id,
-        rewardName: reward.name,
-        points: reward.points,
-        generatedAt: now,
-        expiresAt: now + 30 * 60 * 1000,
-      });
-      setRedeemedHistory((prev) => [
-        {
-          id: makeId(),
-          rewardId: reward.id,
-          rewardName: reward.name,
-          points: reward.points,
-          date: new Date().toLocaleDateString("en-PH", { year: "numeric", month: "long", day: "numeric" }),
-          status: "Redeemed",
-        },
-        ...prev,
-      ]);
-      return true;
-=======
     async (rewardId: string) => {
       const reward = getRewardById(rewardId);
       if (!reward || points < reward.points) return false;
@@ -179,7 +145,6 @@ export function LoyaltyProvider({ children }: { children: ReactNode }) {
         ]);
         return true;
       }
->>>>>>> c71a751 (Initial commit)
     },
     [points]
   );

@@ -17,7 +17,7 @@ export default function MenuPage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-16 text-center sm:py-20">
+      <section className="relative overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-16 text-center sm:py-20">
         <FloatingDecor variant="beans" />
         <div className="relative mx-auto max-w-2xl">
           <AnimatedSection>
@@ -35,7 +35,7 @@ export default function MenuPage() {
       <CategoryTabs active={activeCategory} onChange={setActiveCategory} />
 
       <section className="bg-white px-4 py-12 sm:py-16">
-        <div className="mx-auto max-w-[1280px]">
+        <div className="mx-auto max-w-7xl">
           {products.length === 0 ? (
             <div className="flex flex-col items-center py-20 text-center">
               <Coffee className="h-12 w-12 text-hola-brown-soft/40" />

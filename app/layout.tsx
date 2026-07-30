@@ -14,15 +14,10 @@ import { CartProvider } from "@/lib/cart-context";
 import { LoyaltyProvider } from "@/lib/loyalty-context";
 import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
-<<<<<<< HEAD
-
-const siteUrl = "https://holacoffee.ph";
-=======
 import AuthSessionProvider from "@/components/auth/AuthSessionProvider";
 
 const siteUrl = "https://holacoffee.ph";
 
->>>>>>> c71a751 (Initial commit)
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
@@ -39,18 +34,7 @@ export const metadata: Metadata = {
       "Freshly brewed coffee, handcrafted drinks, and cozy moments made for everyone at HOLA Coffee.",
     url: siteUrl,
     siteName: "HOLA Coffee",
-<<<<<<< HEAD
-    images: [
-      {
-        url: "/images/hola-logo.png",
-        width: 1254,
-        height: 1254,
-        alt: "HOLA Coffee logo",
-      },
-    ],
-=======
     images: [{ url: "/images/hola-logo.png", width: 1254, height: 1254, alt: "HOLA Coffee logo" }],
->>>>>>> c71a751 (Initial commit)
     locale: "en_US",
     type: "website",
   },
@@ -100,21 +84,12 @@ export default function RootLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-hola-blue focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-200 focus:rounded-full focus:bg-hola-blue focus:px-4 focus:py-2 focus:text-white"
         >
           Skip to main content
         </a>
         <CartProvider>
           <LoyaltyProvider>
-<<<<<<< HEAD
-            <Navbar />
-            <main id="main-content" className="flex-1">
-              {children}
-            </main>
-            <Footer />
-            <CartButton />
-            <CartDrawer />
-=======
             <AuthSessionProvider>
               <Navbar />
               <main id="main-content" className="flex-1">
@@ -124,7 +99,6 @@ export default function RootLayout({
               <CartButton />
               <CartDrawer />
             </AuthSessionProvider>
->>>>>>> c71a751 (Initial commit)
           </LoyaltyProvider>
         </CartProvider>
       </body>

@@ -16,7 +16,7 @@ export default async function AdminOrdersPage() {
       <p className="mt-1 text-sm text-hola-brown-soft">All customer and guest orders, most recent first.</p>
 
       <div className="mt-6 overflow-x-auto rounded-hola-lg bg-white shadow-sm">
-        <table className="w-full min-w-[720px] text-left text-sm">
+        <table className="w-full min-w-180 text-left text-sm">
           <thead>
             <tr className="border-b border-hola-beige text-xs uppercase tracking-wide text-hola-brown-soft">
               <th className="px-5 py-3">Order</th>
