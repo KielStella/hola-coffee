@@ -1,74 +1,23 @@
+import { ArrowUpRight, Plus } from "lucide-react";
 import ProductArt from "./ProductArt";
 import ProductTagBadge from "./ProductTagBadge";
 import type { MenuProduct } from "@/lib/menu-data";
 
-export default function ProductCard({
-  product,
-  onViewDetails,
-}: {
-  product: MenuProduct;
-  onViewDetails: (product: MenuProduct) => void;
-}) {
+export default function ProductCard({ product, onViewDetails }: { product: MenuProduct; onViewDetails: (product: MenuProduct) => void }) {
   const soldOut = product.tag === "SOLD_OUT";
-
   return (
-    <article
-      className={`group h-full overflow-hidden rounded-hola-lg bg-white shadow-md ring-1 ring-hola-brown/5 transition duration-300 ${
-        soldOut ? "" : "hover:-translate-y-2 hover:shadow-2xl"
-      }`}
-    >
-      <button
-        type="button"
-        disabled={soldOut}
-        onClick={() => onViewDetails(product)}
-        aria-disabled={soldOut}
-        aria-label={soldOut ? `${product.name} — currently unavailable` : `View details for ${product.name}`}
-        className={`relative block h-44 w-full overflow-hidden text-left ${
-          soldOut ? "cursor-not-allowed" : "cursor-pointer"
-        }`}
-      >
-        <div
-          className={`h-full w-full transition duration-500 ${
-            soldOut ? "opacity-40 grayscale" : "group-hover:scale-110"
-          }`}
-        >
-          <ProductArt category={product.category} name={product.name} image={product.image} className="h-full w-full" />
-        </div>
-        {product.tag && (
-          <span className="absolute left-4 top-4">
-            <ProductTagBadge tag={product.tag} />
-          </span>
-        )}
-        {soldOut && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-            <span className="rounded-full bg-white/90 px-4 py-1.5 text-sm font-semibold text-hola-brown">
-              Currently Unavailable
-            </span>
-          </div>
-        )}
+    <article className={`group flex h-full flex-col overflow-hidden rounded-[2.25rem] border border-hola-brown/[.07] bg-white shadow-[0_18px_50px_-35px_rgba(74,51,37,.65)] transition duration-500 ${soldOut ? "opacity-75" : "hover:-translate-y-2 hover:shadow-2xl"}`}>
+      <button type="button" disabled={soldOut} onClick={() => onViewDetails(product)} aria-label={soldOut ? `${product.name} — currently unavailable` : `Customize ${product.name}`} className={`relative block h-64 w-full overflow-hidden text-left ${soldOut ? "cursor-not-allowed" : "cursor-pointer"}`}>
+        <div className={`h-full w-full transition duration-700 ${soldOut ? "grayscale" : "group-hover:scale-110 group-hover:rotate-1"}`}><ProductArt category={product.category} name={product.name} image={product.image} className="h-full w-full" iconClassName="h-24 w-24" /></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+        {product.tag && <span className="absolute left-5 top-5"><ProductTagBadge tag={product.tag} /></span>}
+        {!soldOut && <span className="absolute bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded-full bg-white text-hola-brown shadow-lg transition duration-300 group-hover:rotate-90 group-hover:bg-hola-yellow"><Plus className="h-5 w-5" /></span>}
+        {soldOut && <div className="absolute inset-0 flex items-center justify-center bg-hola-brown/40"><span className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-hola-brown shadow">Currently unavailable</span></div>}
       </button>
-      <div className="p-5">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg text-hola-brown">{product.name}</h3>
-          <span className="whitespace-nowrap font-display text-hola-blue-dark">
-            ₱{product.basePrice}
-          </span>
-        </div>
-        <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-hola-brown-soft">
-          {product.description}
-        </p>
-        <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-hola-brown-soft/70">
-          {product.category}
-        </p>
-        <button
-          type="button"
-          disabled={soldOut}
-          onClick={() => onViewDetails(product)}
-          aria-disabled={soldOut}
-          className="mt-4 w-full rounded-full bg-hola-brown px-5 py-2.5 text-sm font-display text-white transition enabled:hover:bg-hola-blue-dark enabled:hover:shadow-lg enabled:hover:shadow-hola-blue/30 disabled:cursor-not-allowed disabled:bg-gray-300"
-        >
-          {soldOut ? "Sold Out" : "View Details"}
-        </button>
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.14em] text-hola-blue-dark">{product.category}</p><h3 className="mt-2 text-2xl leading-tight text-hola-brown">{product.name}</h3></div><span className="shrink-0 rounded-full bg-hola-beige px-3 py-1.5 font-display text-hola-brown">₱{product.basePrice}</span></div>
+        <p className="mt-3 line-clamp-2 flex-1 text-sm leading-7 text-hola-brown-soft">{product.description}</p>
+        <button type="button" disabled={soldOut} onClick={() => onViewDetails(product)} className="mt-5 flex w-full items-center justify-between border-t border-hola-brown/[.07] pt-4 text-left font-display text-hola-brown transition enabled:hover:text-hola-blue-dark disabled:cursor-not-allowed disabled:text-hola-brown-soft/50"><span>{soldOut ? "Sold out" : "Customize & add"}</span><ArrowUpRight className="h-5 w-5" /></button>
       </div>
     </article>
   );

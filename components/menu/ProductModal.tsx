@@ -67,14 +67,14 @@ export default function ProductModal({
           aria-label={`${product.name} details`}
         >
           <motion.div
-            className="hola-shadow max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-t-hola-lg bg-white sm:rounded-hola-lg"
+            className="hola-shadow max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-[2.5rem] bg-white sm:rounded-[2.5rem]"
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 40 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative h-52 sm:h-64">
+            <div className="relative h-56 sm:h-72">
               <ProductArt category={product.category} name={product.name} image={product.image} className="h-full w-full" iconClassName="h-24 w-24" />
               <button
                 onClick={resetAndClose}
@@ -87,8 +87,8 @@ export default function ProductModal({
 
             <div className="p-6 sm:p-8">
               <div className="flex items-start justify-between gap-4">
-                <h2 className="text-2xl text-hola-brown">{product.name}</h2>
-                <span className="whitespace-nowrap font-display text-xl text-hola-blue-dark">
+                <div><p className="text-xs font-bold uppercase tracking-[.16em] text-hola-blue-dark">{product.category}</p><h2 className="mt-1 text-3xl text-hola-brown">{product.name}</h2></div>
+                <span className="whitespace-nowrap rounded-full bg-hola-beige px-4 py-2 font-display text-xl text-hola-blue-dark">
                   ₱{unitPrice}
                 </span>
               </div>
@@ -205,7 +205,7 @@ export default function ProductModal({
                   type="button"
                   onClick={handleAddToOrder}
                   disabled={justAdded}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-hola-blue px-8 py-3.5 font-display text-white shadow-lg shadow-hola-blue/30 transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl disabled:translate-y-0"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-hola-brown px-8 py-3.5 font-display text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl disabled:translate-y-0"
                 >
                   {justAdded ? (
                     <>
