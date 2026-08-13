@@ -108,7 +108,7 @@ export default function HomepageVideoSection({
             <Coffee className="h-4 w-4" /> Real stories. Real coffee. Real people.
           </div>
           <h2 className="mt-5 text-4xl leading-tight text-hola-brown sm:text-5xl lg:text-6xl">
-            What Our Customers Say
+            HOLA Videos
           </h2>
           <p className="mt-3 text-hola-brown-soft">Real moments from the HOLA community.</p>
           <div className="mx-auto mt-4 h-1.5 w-16 rounded-full bg-hola-yellow" />
