@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { X, Plus, Minus, Trash2, ShoppingBag, QrCode, Info } from "lucide-react";
 import ProductArt from "../menu/ProductArt";
 import { useCart } from "@/lib/cart-context";
@@ -10,6 +10,7 @@ import { formatSize, formatSweetness } from "@/lib/menu-data";
 
 export default function CartDrawer() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isGenerating, startGenerating] = useTransition();
   const {
     items,
@@ -21,6 +22,9 @@ export default function CartDrawer() {
     removeItem,
     generateOrder,
   } = useCart();
+  const isDashboard = pathname.startsWith("/admin") || pathname.startsWith("/staff-portal");
+
+  if (isDashboard) return null;
 
   function handleGenerateOrder() {
     startGenerating(async () => {
