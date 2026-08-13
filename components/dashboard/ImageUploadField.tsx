@@ -12,6 +12,7 @@ const ACCEPT_BY_FOLDER: Record<UploadFolder, string> = {
   staff: "image/jpeg,image/png,image/webp,image/gif",
   gallery: "image/jpeg,image/png,image/webp,image/gif",
   settings: "image/jpeg,image/png,image/webp,image/gif",
+  moments: "image/jpeg,image/png,image/webp",
 };
 
 export default function ImageUploadField({

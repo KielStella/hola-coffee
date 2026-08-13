@@ -5,7 +5,7 @@ import { requireAuth, requireRole } from "@/lib/rbac";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
-export type UploadFolder = "menu" | "rewards" | "staff" | "gallery" | "settings" | "avatars";
+export type UploadFolder = "menu" | "rewards" | "staff" | "gallery" | "settings" | "avatars" | "moments";
 
 // Profile pictures are restricted to PNG/JPG/JPEG per spec; other content
 // images additionally allow WebP/GIF for more flexibility.
@@ -16,11 +16,12 @@ const ALLOWED_TYPES: Record<UploadFolder, string[]> = {
   staff: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   gallery: ["image/jpeg", "image/png", "image/webp", "image/gif"],
   settings: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+  moments: ["image/jpeg", "image/png", "image/webp"],
 };
 
 export async function uploadImage(formData: FormData, folder: UploadFolder) {
   // Any signed-in user may upload their own avatar; everything else is admin-only content.
-  const session = folder === "avatars" ? await requireAuth() : await requireRole("ADMIN");
+  const session = folder === "avatars" || folder === "moments" ? await requireAuth() : await requireRole("ADMIN");
 
   const file = formData.get("file");
   if (!(file instanceof File)) {
@@ -47,7 +48,8 @@ export async function uploadImage(formData: FormData, folder: UploadFolder) {
   }
 
   const extension = file.name.split(".").pop() ?? "jpg";
-  const pathPrefix = folder === "avatars" ? `avatars/${session.user.id}` : folder;
+  const pathPrefix =
+    folder === "avatars" ? `avatars/${session.user.id}` : folder === "moments" ? `moments/${session.user.id}` : folder;
   const filename = `${pathPrefix}/${crypto.randomUUID()}.${extension}`;
 
   const blob = await put(filename, file, {
@@ -66,7 +68,8 @@ export async function deleteUploadedImage(url: string) {
   // Non-admins may only delete images under their own avatar path — admins
   // manage all other content images (menu/rewards/staff/gallery/settings).
   const isOwnAvatar = url.includes(`/avatars/${session.user.id}/`);
-  if (session.user.role !== "ADMIN" && !isOwnAvatar) {
+  const isOwnMoment = url.includes(`/moments/${session.user.id}/`);
+  if (session.user.role !== "ADMIN" && !isOwnAvatar && !isOwnMoment) {
     return { success: false as const, error: "You don't have permission to delete this image." };
   }
 

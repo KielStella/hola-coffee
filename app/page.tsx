@@ -9,11 +9,12 @@ import GallerySection from "@/components/home/GallerySection";
 import FAQSection from "@/components/home/FAQSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 import { getSettings } from "@/actions/settings";
+import { getApprovedMoments } from "@/actions/moments";
 
 export const dynamic = "force-dynamic";
 
 export default async function HomePage() {
-  const settings = await getSettings();
+  const [settings, moments] = await Promise.all([getSettings(), getApprovedMoments()]);
 
   return (
     <>
@@ -25,7 +26,7 @@ export default async function HomePage() {
       <RewardsPreview />
       <PromotionsSection />
       <HomepageVideoSection url={settings.homepageVideoUrl} type={settings.homepageVideoType} />
-      <GallerySection />
+      <GallerySection moments={moments} />
       <FAQSection />
       <NewsletterSection />
     </>

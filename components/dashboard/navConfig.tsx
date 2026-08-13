@@ -11,6 +11,7 @@ import {
   Settings,
   ScrollText,
   FileBarChart,
+  Images,
   type LucideIcon,
 } from "lucide-react";
 
@@ -30,6 +31,7 @@ export const adminNavItems: DashboardNavItem[] = [
   { label: "Staff", href: "/admin/staff", icon: UserCog },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Messages", href: "/admin/messages", icon: MessageSquare },
+  { label: "Moments", href: "/admin/moments", icon: Images },
   { label: "Activity Log", href: "/admin/logs", icon: ScrollText },
   { label: "Reports", href: "/admin/reports", icon: FileBarChart },
   { label: "Settings", href: "/admin/settings", icon: Settings },
