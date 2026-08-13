@@ -31,6 +31,7 @@ export default function ImageUploadField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [previewFailed, setPreviewFailed] = useState(false);
   const previewShape = rounded ? "rounded-full" : "rounded-hola-sm";
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -48,6 +49,7 @@ export default function ImageUploadField({
         return;
       }
       const previousUrl = value;
+      setPreviewFailed(false);
       onChange(result.url);
       if (previousUrl) {
         deleteUploadedImage(previousUrl).catch(() => {});
@@ -60,6 +62,7 @@ export default function ImageUploadField({
 
   function handleRemove() {
     if (value) deleteUploadedImage(value).catch(() => {});
+    setPreviewFailed(false);
     onChange("");
   }
 
@@ -67,9 +70,20 @@ export default function ImageUploadField({
     <div>
       <label className="mb-1.5 block text-sm font-semibold text-hola-brown">{label}</label>
       <div className="flex items-center gap-3">
-        {value ? (
+        {value && !previewFailed ? (
           <div className={`relative h-16 w-16 shrink-0 overflow-hidden bg-hola-beige ${previewShape}`}>
-            <Image src={value} alt="" fill className="object-cover" />
+            <Image
+              src={value}
+              alt={`${label} preview`}
+              fill
+              sizes="64px"
+              unoptimized
+              className="object-cover"
+              onError={() => {
+                setPreviewFailed(true);
+                setError("The uploaded image could not be displayed. Please upload it again.");
+              }}
+            />
             <button
               type="button"
               onClick={handleRemove}
