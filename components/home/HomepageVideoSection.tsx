@@ -156,9 +156,6 @@ export default function HomepageVideoSection({
                       >
                         {isTikTokMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
                       </button>
-                      <div className="mx-1 h-1 flex-1 rounded-full bg-white/25">
-                        <div className="h-full w-1/3 rounded-full bg-hola-yellow" />
-                      </div>
                       <button
                         type="button"
                         onClick={openTikTokFullscreen}
