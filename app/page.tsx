@@ -2,7 +2,6 @@ import Hero from "@/components/Hero";
 import WhyChooseHola from "@/components/WhyChooseHola";
 import FeaturedSection from "@/components/FeaturedSection";
 import RewardsPreview from "@/components/RewardsPreview";
-import WaveDivider from "@/components/WaveDivider";
 import PromotionsSection from "@/components/home/PromotionsSection";
 import HomepageVideoSection from "@/components/home/HomepageVideoSection";
 import GallerySection from "@/components/home/GallerySection";
@@ -13,16 +12,19 @@ import { getApprovedMoments } from "@/actions/moments";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "HOLA Coffee | Find Your Happy Sip",
+  description: "Handcrafted coffee, crave-worthy treats, rewarding visits, and warm moments at HOLA Coffee.",
+};
+
 export default async function HomePage() {
   const [settings, moments] = await Promise.all([getSettings(), getApprovedMoments()]);
 
   return (
     <>
       <Hero />
-      <WaveDivider color="var(--hola-beige)" />
       <WhyChooseHola />
       <FeaturedSection />
-      <WaveDivider color="var(--hola-blue-dark)" />
       <RewardsPreview />
       <PromotionsSection />
       <HomepageVideoSection url={settings.homepageVideoUrl} type={settings.homepageVideoType} />
