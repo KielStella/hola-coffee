@@ -68,7 +68,6 @@ export async function updateStaffAccount(id: string, input: Partial<StaffInput>)
   });
 
   revalidatePath("/admin/staff");
-  return staff;
 }
 
 export async function deactivateStaffAccount(id: string, isActive: boolean) {
@@ -86,7 +85,6 @@ export async function deactivateStaffAccount(id: string, isActive: boolean) {
   });
 
   revalidatePath("/admin/staff");
-  return staff;
 }
 
 export async function resetStaffPassword(id: string) {

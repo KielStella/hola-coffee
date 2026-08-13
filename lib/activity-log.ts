@@ -20,7 +20,7 @@ export async function logActivity({
         action,
         entity,
         entityId,
-        metadata,
+        metadata: metadata as any,
       },
     });
   } catch (error) {

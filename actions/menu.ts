@@ -34,7 +34,6 @@ export async function createProduct(input: ProductInput) {
 
   revalidatePath("/admin/menu");
   revalidatePath("/menu");
-  return product;
 }
 
 export async function updateProduct(id: string, input: Partial<ProductInput>) {
@@ -51,7 +50,6 @@ export async function updateProduct(id: string, input: Partial<ProductInput>) {
 
   revalidatePath("/admin/menu");
   revalidatePath("/menu");
-  return product;
 }
 
 export async function deleteProduct(id: string) {
@@ -66,7 +64,6 @@ export async function deleteProduct(id: string) {
 
   revalidatePath("/admin/menu");
   revalidatePath("/menu");
-  return { success: true };
 }
 
 export async function toggleProductAvailability(id: string, isAvailable: boolean) {
@@ -85,5 +82,4 @@ export async function toggleProductAvailability(id: string, isAvailable: boolean
 
   revalidatePath("/admin/menu");
   revalidatePath("/menu");
-  return product;
 }

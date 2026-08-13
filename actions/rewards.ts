@@ -32,7 +32,6 @@ export async function createReward(input: RewardInput) {
 
   revalidatePath("/admin/rewards");
   revalidatePath("/rewards");
-  return reward;
 }
 
 export async function updateReward(id: string, input: Partial<RewardInput>) {
@@ -49,7 +48,6 @@ export async function updateReward(id: string, input: Partial<RewardInput>) {
 
   revalidatePath("/admin/rewards");
   revalidatePath("/rewards");
-  return reward;
 }
 
 export async function deleteReward(id: string) {
@@ -60,7 +58,6 @@ export async function deleteReward(id: string) {
 
   revalidatePath("/admin/rewards");
   revalidatePath("/rewards");
-  return { success: true };
 }
 
 /** Customer requests a redemption. Points are reserved but NOT deducted until staff approves. */
@@ -152,7 +149,6 @@ export async function approveRewardRedemption(redemptionId: string) {
   });
 
   revalidatePath("/staff-portal/orders");
-  return { success: true };
 }
 
 export async function cancelRewardRedemption(redemptionId: string) {
@@ -168,6 +164,4 @@ export async function cancelRewardRedemption(redemptionId: string) {
     entity: "RewardRedemption",
     entityId: redemptionId,
   });
-
-  return { success: true };
 }
