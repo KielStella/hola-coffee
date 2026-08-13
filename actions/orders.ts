@@ -172,6 +172,24 @@ const STATUS_TIMESTAMP_FIELD: Record<string, string> = {
   CANCELLED: "cancelledAt",
 };
 
+const ALLOWED_STATUS_TRANSITIONS: Record<string, string[]> = {
+  PENDING: ["CONFIRMED", "CANCELLED"],
+  CONFIRMED: ["PREPARING", "CANCELLED"],
+  PREPARING: ["READY", "CANCELLED"],
+  READY: ["COMPLETED"],
+  COMPLETED: [],
+  CANCELLED: [],
+};
+
+export async function getPublicOrderStatus(qrToken: string) {
+  if (!qrToken || qrToken.length > 200) return null;
+  const order = await prisma.order.findUnique({
+    where: { qrToken },
+    select: { orderNumber: true, status: true, updatedAt: true, confirmedAt: true, preparingAt: true, readyAt: true, completedAt: true, cancelledAt: true },
+  });
+  return order ? { ...order, updatedAt: order.updatedAt.toISOString() } : null;
+}
+
 export async function updateOrderStatus(
   orderId: string,
   status: "PENDING" | "CONFIRMED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED"
@@ -180,6 +198,9 @@ export async function updateOrderStatus(
 
   const order = await prisma.order.findUnique({ where: { id: orderId } });
   if (!order) throw new Error("Order not found.");
+  if (!ALLOWED_STATUS_TRANSITIONS[order.status]?.includes(status)) {
+    throw new Error(`Order cannot move from ${order.status} to ${status}. Refresh and try again.`);
+  }
 
   const timestampField = STATUS_TIMESTAMP_FIELD[status];
 
@@ -230,5 +251,7 @@ export async function updateOrderStatus(
 
   revalidatePath("/staff-portal/orders");
   revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+  revalidatePath("/staff-portal");
   return updated;
 }

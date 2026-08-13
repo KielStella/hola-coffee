@@ -14,6 +14,13 @@ const statusStyles: Record<string, string> = {
   CANCELLED: "bg-red-100 text-red-600",
 };
 
+const actionLabels: Record<string, string> = {
+  CONFIRMED: "Confirm order",
+  PREPARING: "Start preparing",
+  READY: "Mark ready",
+  COMPLETED: "Mark completed",
+};
+
 export default function OrderStatusControls({
   orderId,
   currentStatus,
@@ -51,7 +58,7 @@ export default function OrderStatusControls({
           disabled={isPending}
           className="rounded-full bg-hola-blue px-3 py-1 text-xs font-semibold text-white transition hover:bg-hola-blue-dark disabled:opacity-60"
         >
-          Mark {nextStatus.replace("_", " ")}
+          {isPending ? "Updating…" : actionLabels[nextStatus]}
         </button>
       )}
       {status !== "COMPLETED" && status !== "CANCELLED" && (

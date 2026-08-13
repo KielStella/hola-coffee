@@ -15,6 +15,7 @@ type ScanResult =
   | null;
 
 const ORDER_STATUS_FLOW = ["PENDING", "CONFIRMED", "PREPARING", "READY", "COMPLETED"] as const;
+const ORDER_ACTION_LABELS: Record<string, string> = { CONFIRMED: "Confirm order", PREPARING: "Start preparing", READY: "Mark ready", COMPLETED: "Mark completed" };
 
 export default function ScannerPanel() {
   const [result, setResult] = useState<ScanResult>(null);
@@ -39,6 +40,15 @@ export default function ScannerPanel() {
   function reset() {
     setResult(null);
     setScanKey((k) => k + 1);
+  }
+
+  function advanceScannedOrder(status: (typeof ORDER_STATUS_FLOW)[number] | "CANCELLED") {
+    if (result?.kind !== "order" || !result.data) return;
+    const orderId = result.data.id;
+    startTransition(async () => {
+      await updateOrderStatus(orderId, status);
+      setResult(current => current?.kind === "order" && current.data ? { kind: "order", data: { ...current.data, status } } : current);
+    });
   }
 
   return (
@@ -89,33 +99,27 @@ export default function ScannerPanel() {
           </p>
 
           <div className="mt-5 flex flex-wrap gap-2">
-            {ORDER_STATUS_FLOW.filter((s) => s !== result.data!.status).map((status) => (
+            {(() => {
+              const index = ORDER_STATUS_FLOW.indexOf(result.data!.status as (typeof ORDER_STATUS_FLOW)[number]);
+              const nextStatus = index >= 0 && index < ORDER_STATUS_FLOW.length - 1 ? ORDER_STATUS_FLOW[index + 1] : null;
+              return nextStatus ? (
               <button
-                key={status}
+                key={nextStatus}
                 disabled={isPending}
-                onClick={() =>
-                  startTransition(async () => {
-                    await updateOrderStatus(result.data!.id, status);
-                    reset();
-                  })
-                }
+                onClick={() => advanceScannedOrder(nextStatus)}
                 className="rounded-full bg-hola-brown px-4 py-2 text-xs font-semibold text-white transition hover:bg-hola-blue-dark disabled:opacity-60"
               >
-                Mark {status.replace("_", " ")}
+                {isPending ? "Updating…" : ORDER_ACTION_LABELS[nextStatus]}
               </button>
-            ))}
-            <button
+              ) : null;
+            })()}
+            {result.data.status !== "READY" && result.data.status !== "COMPLETED" && result.data.status !== "CANCELLED" && <button
               disabled={isPending}
-              onClick={() =>
-                startTransition(async () => {
-                  await updateOrderStatus(result.data!.id, "CANCELLED");
-                  reset();
-                })
-              }
+              onClick={() => advanceScannedOrder("CANCELLED")}
               className="rounded-full border border-red-200 px-4 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-50 disabled:opacity-60"
             >
               Cancel Order
-            </button>
+            </button>}
           </div>
 
           <button

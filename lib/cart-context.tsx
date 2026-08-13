@@ -29,6 +29,7 @@ export type OrderSnapshot = {
   items: CartItem[];
   total: number;
   qrToken: string;
+  status: "PENDING" | "CONFIRMED" | "PREPARING" | "READY" | "COMPLETED" | "CANCELLED";
 };
 
 type AddItemInput = {
@@ -140,6 +141,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         items,
         total: dbOrder.total,
         qrToken: dbOrder.qrToken,
+        status: dbOrder.status,
       };
       setLastOrder(order);
       setItems([]);
@@ -155,6 +157,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         items,
         total: subtotal,
         qrToken: makeId(),
+        status: "PENDING",
       };
       setLastOrder(order);
       setItems([]);
