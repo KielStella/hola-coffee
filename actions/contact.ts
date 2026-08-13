@@ -6,6 +6,7 @@ import { auth } from "@/auth";
 import { logActivity } from "@/lib/activity-log";
 import { checkRateLimit, getClientIdentifier, RateLimitError } from "@/lib/rate-limit";
 import { philippinePhoneSchema } from "@/lib/validations/auth";
+import { contactAdminNotificationEmail, contactConfirmationEmail, sendEmail } from "@/lib/email";
 
 const contactSchema = z.object({
   fullName: z.string().min(2),
@@ -52,10 +53,13 @@ export async function submitContactMessage(input: ContactInput) {
     entityId: contactMessage.id,
   });
 
-  const adminEmail = process.env.BUSINESS_EMAIL;
-  console.info(`[email disabled] Would send contact confirmation to ${parsed.data.email}`);
-  if (adminEmail) {
-    console.info(`[email disabled] Would notify admin at ${adminEmail} about subject: ${parsed.data.subject}`);
+  const adminEmail = process.env.BUSINESS_EMAIL ?? "kutchiritoestrella09@gmail.com";
+  const emailResults = await Promise.allSettled([
+    sendEmail({ to: adminEmail, replyTo: parsed.data.email, subject: `New HOLA inquiry: ${parsed.data.subject}`, html: contactAdminNotificationEmail(parsed.data.fullName, parsed.data.email, parsed.data.phone, parsed.data.subject, parsed.data.message) }),
+    sendEmail({ to: parsed.data.email, subject: "We received your HOLA Coffee message", html: contactConfirmationEmail(parsed.data.fullName) }),
+  ]);
+  for (const result of emailResults) {
+    if (result.status === "rejected") console.error("[contact] email delivery failed:", result.reason);
   }
 
   return { success: true as const };
