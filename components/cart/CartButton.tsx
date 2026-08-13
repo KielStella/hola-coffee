@@ -3,14 +3,16 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { useCart } from "@/lib/cart-context";
 
 export default function CartButton() {
   const pathname = usePathname();
+  const { status } = useSession();
   const { itemCount, openDrawer } = useCart();
   const isDashboard = pathname.startsWith("/admin") || pathname.startsWith("/staff-portal");
 
-  if (isDashboard) return null;
+  if (status !== "authenticated" || isDashboard) return null;
 
   return (
     <button

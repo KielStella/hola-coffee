@@ -3,6 +3,7 @@
 import { useTransition } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { X, Plus, Minus, Trash2, ShoppingBag, QrCode, Info } from "lucide-react";
 import ProductArt from "../menu/ProductArt";
 import { useCart } from "@/lib/cart-context";
@@ -11,6 +12,7 @@ import { formatSize, formatSweetness } from "@/lib/menu-data";
 export default function CartDrawer() {
   const router = useRouter();
   const pathname = usePathname();
+  const { status } = useSession();
   const [isGenerating, startGenerating] = useTransition();
   const {
     items,
@@ -24,7 +26,7 @@ export default function CartDrawer() {
   } = useCart();
   const isDashboard = pathname.startsWith("/admin") || pathname.startsWith("/staff-portal");
 
-  if (isDashboard) return null;
+  if (status !== "authenticated" || isDashboard) return null;
 
   function handleGenerateOrder() {
     startGenerating(async () => {
