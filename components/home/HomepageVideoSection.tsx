@@ -1,7 +1,8 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Coffee, Heart, Play, Sparkles } from "lucide-react";
+import { Coffee, Heart, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 
 function getTikTokVideoId(url: string) {
@@ -43,9 +44,33 @@ export default function HomepageVideoSection({
   url: string | null;
   type: string | null;
 }) {
-  if (!url) return null;
+  const tiktokId = type === "tiktok" && url ? getTikTokVideoId(url) : null;
+  const tiktokPlayerRef = useRef<HTMLIFrameElement>(null);
+  const [isTikTokMuted, setIsTikTokMuted] = useState(true);
 
-  const tiktokId = type === "tiktok" ? getTikTokVideoId(url) : null;
+  useEffect(() => {
+    function handlePlayerMessage(event: MessageEvent) {
+      if (event.origin !== "https://www.tiktok.com") return;
+      const message = event.data as { type?: string; value?: unknown; "x-tiktok-player"?: boolean };
+      if (message?.["x-tiktok-player"] && message.type === "onMute") {
+        setIsTikTokMuted(Boolean(message.value));
+      }
+    }
+
+    window.addEventListener("message", handlePlayerMessage);
+    return () => window.removeEventListener("message", handlePlayerMessage);
+  }, []);
+
+  function toggleTikTokSound() {
+    const nextMuted = !isTikTokMuted;
+    tiktokPlayerRef.current?.contentWindow?.postMessage(
+      { type: nextMuted ? "mute" : "unMute", "x-tiktok-player": true },
+      "https://www.tiktok.com",
+    );
+    setIsTikTokMuted(nextMuted);
+  }
+
+  if (!url) return null;
 
   return (
     <section className="relative isolate overflow-hidden bg-hola-beige px-4 py-20 sm:py-28">
@@ -84,9 +109,19 @@ export default function HomepageVideoSection({
                 </div>
 
                 {type === "tiktok" && tiktokId ? (
-                  <div className="mx-auto aspect-[9/16] max-h-[720px] max-w-[405px]">
+                  <div className="relative mx-auto aspect-[9/16] max-h-[720px] max-w-[405px]">
+                    <button
+                      type="button"
+                      onClick={toggleTikTokSound}
+                      className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white text-hola-brown shadow-lg transition hover:scale-105 hover:bg-hola-yellow"
+                      aria-label={isTikTokMuted ? "Turn video sound on" : "Mute video"}
+                      title={isTikTokMuted ? "Turn sound on" : "Mute"}
+                    >
+                      {isTikTokMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    </button>
                     <iframe
-                      src={`https://www.tiktok.com/player/v1/${tiktokId}?autoplay=1&loop=1&muted=1&controls=1`}
+                      ref={tiktokPlayerRef}
+                      src={`https://www.tiktok.com/player/v1/${tiktokId}?autoplay=1&loop=1&muted=1&controls=1&volume_control=0&rel=0`}
                       title="HOLA Coffee TikTok video"
                       allow="autoplay; encrypted-media; picture-in-picture"
                       allowFullScreen
