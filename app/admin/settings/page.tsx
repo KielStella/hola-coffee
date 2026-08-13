@@ -27,6 +27,8 @@ export default async function AdminSettingsPage() {
             pointsMultiplier: settings.pointsMultiplier,
             seoTitle: settings.seoTitle ?? "",
             seoDescription: settings.seoDescription ?? "",
+            homepageVideoUrl: settings.homepageVideoUrl ?? "",
+            homepageVideoType: (settings.homepageVideoType as "upload" | "tiktok" | null) ?? "",
           }}
         />
       </div>

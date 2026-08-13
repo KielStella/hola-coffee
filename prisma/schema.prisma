@@ -392,6 +392,9 @@ model Settings {
   seoTitle       String?
   seoDescription String?
 
+  homepageVideoUrl  String?
+  homepageVideoType String?
+
   updatedAt DateTime @updatedAt
 }
 

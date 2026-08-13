@@ -24,6 +24,8 @@ const settingsSchema = z.object({
   pointsMultiplier: z.number().positive().optional(),
   seoTitle: z.string().optional(),
   seoDescription: z.string().optional(),
+  homepageVideoUrl: z.string().url().optional().or(z.literal("")),
+  homepageVideoType: z.enum(["upload", "tiktok"]).optional().or(z.literal("")),
 });
 
 export type SettingsInput = z.infer<typeof settingsSchema>;

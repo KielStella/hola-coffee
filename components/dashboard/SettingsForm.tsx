@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Save, CheckCircle2 } from "lucide-react";
+import { useRef, useState, useTransition } from "react";
+import { upload } from "@vercel/blob/client";
+import { Save, CheckCircle2, Upload, Loader2, X } from "lucide-react";
 import { updateSettings, type SettingsInput } from "@/actions/settings";
 
 const inputClass =
@@ -12,6 +13,34 @@ export default function SettingsForm({ initial }: { initial: SettingsInput }) {
   const [form, setForm] = useState(initial);
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleVideoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setVideoError(null);
+    setIsUploadingVideo(true);
+    try {
+      const blob = await upload(`videos/${file.name}`, file, {
+        access: "public",
+        handleUploadUrl: "/api/blob/video-upload",
+        multipart: true,
+      });
+      setForm((current) => ({
+        ...current,
+        homepageVideoUrl: blob.url,
+        homepageVideoType: "upload",
+      }));
+    } catch (error) {
+      setVideoError(error instanceof Error ? error.message : "Video upload failed.");
+    } finally {
+      setIsUploadingVideo(false);
+      if (videoInputRef.current) videoInputRef.current.value = "";
+    }
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -71,6 +100,69 @@ export default function SettingsForm({ initial }: { initial: SettingsInput }) {
             <label className={labelClass}>Weekend Hours</label>
             <input className={inputClass} {...field("hoursWeekend")} />
           </div>
+        </div>
+      </div>
+
+      <div className="rounded-hola-lg bg-white p-5 shadow-sm">
+        <h2 className="font-display text-lg text-hola-brown">Homepage Video</h2>
+        <p className="mt-1 text-sm text-hola-brown-soft">
+          Replaces the customer testimonials section. Upload an MP4/WebM video or paste a public TikTok video URL.
+        </p>
+        <div className="mt-4 space-y-4">
+          <div>
+            <label className={labelClass}>TikTok Video URL</label>
+            <input
+              type="url"
+              placeholder="https://www.tiktok.com/@username/video/123..."
+              className={inputClass}
+              value={form.homepageVideoType === "tiktok" ? form.homepageVideoUrl ?? "" : ""}
+              onChange={(e) =>
+                setForm((current) => ({
+                  ...current,
+                  homepageVideoUrl: e.target.value,
+                  homepageVideoType: e.target.value ? "tiktok" : "",
+                }))
+              }
+            />
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              disabled={isUploadingVideo}
+              onClick={() => videoInputRef.current?.click()}
+              className="inline-flex items-center gap-2 rounded-full border border-hola-brown/15 px-4 py-2 text-sm text-hola-brown transition hover:bg-hola-beige disabled:opacity-60"
+            >
+              {isUploadingVideo ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+              {isUploadingVideo ? "Uploading video…" : "Upload MP4 or WebM"}
+            </button>
+            <input
+              ref={videoInputRef}
+              type="file"
+              accept="video/mp4,video/webm"
+              onChange={handleVideoUpload}
+              className="hidden"
+            />
+            {form.homepageVideoUrl && (
+              <button
+                type="button"
+                onClick={() =>
+                  setForm((current) => ({ ...current, homepageVideoUrl: "", homepageVideoType: "" }))
+                }
+                className="inline-flex items-center gap-1 text-sm text-red-600 hover:underline"
+              >
+                <X className="h-4 w-4" /> Remove video
+              </button>
+            )}
+          </div>
+
+          {form.homepageVideoType === "upload" && form.homepageVideoUrl && (
+            <video src={form.homepageVideoUrl} controls muted className="max-h-72 w-full rounded-hola-sm bg-black" />
+          )}
+          {videoError && <p className="text-sm text-red-600">{videoError}</p>}
+          <p className="text-xs text-hola-brown-soft">
+            Videos autoplay muted because browsers block autoplay with sound. Maximum upload size: 100 MB.
+          </p>
         </div>
       </div>
 
