@@ -48,7 +48,7 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-100 flex items-start justify-center bg-hola-brown/50 px-4 pt-24 backdrop-blur-sm sm:pt-32"
+          className="fixed inset-0 z-[100] flex items-start justify-center bg-hola-brown/50 px-4 pt-24 backdrop-blur-sm sm:pt-32"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}

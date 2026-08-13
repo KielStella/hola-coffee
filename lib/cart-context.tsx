@@ -8,17 +8,14 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import {
-  getProductById,
-  sizeAdjustments,
-  type SizeOption,
-  type SweetnessOption,
-} from "./menu-data";
+import { sizeAdjustments, type MenuProduct, type SizeOption, type SweetnessOption } from "./menu-data";
 
 export type CartItem = {
   cartItemId: string;
   productId: string;
   name: string;
+  category: MenuProduct["category"];
+  image?: string | null;
   size: SizeOption;
   sweetness: SweetnessOption;
   instructions: string;
@@ -35,7 +32,7 @@ export type OrderSnapshot = {
 };
 
 type AddItemInput = {
-  productId: string;
+  product: MenuProduct;
   size: SizeOption;
   sweetness: SweetnessOption;
   instructions: string;
@@ -70,8 +67,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [lastOrder, setLastOrder] = useState<OrderSnapshot | null>(null);
 
   const addItem = useCallback((input: AddItemInput) => {
-    const product = getProductById(input.productId);
-    if (!product) return;
+    const { product } = input;
     const unitPrice = product.basePrice + sizeAdjustments[input.size];
 
     setItems((prev) => [
@@ -80,6 +76,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartItemId: makeId(),
         productId: product.id,
         name: product.name,
+        category: product.category,
+        image: product.image,
         size: input.size,
         sweetness: input.sweetness,
         instructions: input.instructions,
@@ -129,19 +127,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const dbOrder = await createOrder({
         items: items.map((item) => ({
           productId: item.productId,
-          // map local SizeOption / SweetnessOption to backend enum values
-          size:
-            item.size === "Small"
-              ? "SMALL"
-              : item.size === "Medium"
-              ? "MEDIUM"
-              : "LARGE",
-          sweetness:
-            item.sweetness === "Original"
-              ? "ORIGINAL"
-              : item.sweetness === "Less Sweet"
-              ? "LESS_SWEET"
-              : "SWEETER",
+          size: item.size,
+          sweetness: item.sweetness,
           instructions: item.instructions,
           quantity: item.quantity,
         })),

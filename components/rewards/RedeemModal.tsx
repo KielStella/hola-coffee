@@ -24,7 +24,7 @@ export default function RedeemModal({
 
   async function handleConfirmRedeem() {
     if (!reward) return;
-    const success = await redeemReward(reward.id);
+    const success = await redeemReward(reward);
     if (success) {
       confetti({
         particleCount: 120,
@@ -41,7 +41,7 @@ export default function RedeemModal({
     <AnimatePresence>
       {reward && (
         <motion.div
-          className="fixed inset-0 z-110 flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-hola-brown/50 px-4 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -59,7 +59,7 @@ export default function RedeemModal({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative h-40">
-              <RewardArt category={reward.category} name={reward.name} className="h-full w-full" iconClassName="h-16 w-16" />
+              <RewardArt category={reward.category} name={reward.name} image={reward.image} className="h-full w-full" iconClassName="h-16 w-16" />
               <button
                 onClick={onClose}
                 aria-label="Close"

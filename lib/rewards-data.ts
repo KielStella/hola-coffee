@@ -9,6 +9,28 @@ export const rewardCategories = [
 
 export type RewardCategory = (typeof rewardCategories)[number];
 
+/** Matches the Prisma `RewardCategoryName` enum exactly — used to map DB rows to display labels. */
+export type RewardCategoryName =
+  | "COFFEE"
+  | "NON_COFFEE"
+  | "PASTRIES"
+  | "DESSERTS"
+  | "MERCHANDISE"
+  | "LIMITED_EDITION";
+
+const categoryLabels: Record<RewardCategoryName, RewardCategory> = {
+  COFFEE: "Coffee",
+  NON_COFFEE: "Non Coffee",
+  PASTRIES: "Pastries",
+  DESSERTS: "Desserts",
+  MERCHANDISE: "Merchandise",
+  LIMITED_EDITION: "Limited Edition",
+};
+
+export function formatRewardCategory(category: RewardCategoryName): RewardCategory {
+  return categoryLabels[category];
+}
+
 export type Reward = {
   id: string;
   name: string;
@@ -16,6 +38,7 @@ export type Reward = {
   points: number;
   category: RewardCategory;
   badge?: "Popular" | "Limited";
+  image?: string | null;
 };
 
 export const rewards: Reward[] = [
@@ -124,12 +147,13 @@ export const rewards: Reward[] = [
   },
 ];
 
-export function getRewardsByCategory(category: RewardCategory): Reward[] {
-  return rewards.filter((r) => r.category === category);
+export function getRewardsByCategory(rewardsList: Reward[], category: RewardCategory): Reward[] {
+  return rewardsList.filter((r) => r.category === category);
 }
 
-export function getRewardById(id: string): Reward | undefined {
-  return rewards.find((r) => r.id === id);
+/** Looks up a reward within a given list (e.g. the fallback catalog). For real redemptions, actions/rewards.ts queries the database directly instead. */
+export function getRewardById(rewardsList: Reward[], id: string): Reward | undefined {
+  return rewardsList.find((r) => r.id === id);
 }
 
 export const testimonials = [

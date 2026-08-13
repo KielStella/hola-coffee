@@ -1,17 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { motion } from "framer-motion";
 import { Send, CheckCircle2 } from "lucide-react";
 import { submitContactMessage } from "@/actions/contact";
+import { getMyProfile } from "@/actions/profile";
+import { philippinePhoneSchema } from "@/lib/validations/auth";
+import PhilippinePhoneInput from "@/components/PhilippinePhoneInput";
 
 const contactSchema = z.object({
   fullName: z.string().min(2, "Please enter your full name."),
   email: z.string().email("Please enter a valid email address."),
-  phone: z.string().min(7, "Please enter a valid phone number.").optional().or(z.literal("")),
+  phone: philippinePhoneSchema,
   subject: z.string().min(3, "Please enter a subject."),
   message: z.string().min(10, "Message should be at least 10 characters."),
 });
@@ -22,14 +26,42 @@ const inputClass =
   "w-full rounded-hola-sm border border-hola-brown/10 bg-hola-beige px-4 py-3 text-hola-brown outline-none transition placeholder:text-hola-brown-soft/60 focus:border-hola-blue focus:ring-2 focus:ring-hola-blue/30";
 
 export default function ContactForm() {
+  const { status } = useSession();
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
-  } = useForm<ContactValues>({ resolver: zodResolver(contactSchema) });
+  } = useForm<ContactValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: { fullName: "", email: "", phone: "", subject: "", message: "" },
+  });
+
+  // Autofill name/email/phone for signed-in users — fields stay fully editable.
+  useEffect(() => {
+    if (status !== "authenticated") return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const profile = await getMyProfile();
+        if (cancelled || !profile) return;
+        reset((current) => ({
+          ...current,
+          fullName: current.fullName || profile.name,
+          email: current.email || profile.email,
+          phone: current.phone || profile.phone,
+        }));
+      } catch (error) {
+        console.error("[contact] failed to autofill from profile:", error);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [status, reset]);
 
   async function onSubmit(data: ContactValues) {
     const result = await submitContactMessage(data);
@@ -105,7 +137,19 @@ export default function ContactForm() {
           <label htmlFor="phone" className="mb-1.5 block text-sm font-semibold text-hola-brown">
             Phone Number <span className="font-normal text-hola-brown-soft">(optional)</span>
           </label>
-          <input id="phone" className={inputClass} placeholder="+63 9XX XXX XXXX" {...register("phone")} />
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <PhilippinePhoneInput
+                id="phone"
+                value={field.value ?? ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                aria-invalid={!!errors.phone}
+              />
+            )}
+          />
           {errors.phone && (
             <p className="mt-1.5 text-sm text-red-600" role="alert">
               {errors.phone.message}

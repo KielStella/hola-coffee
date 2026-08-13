@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Coffee, CupSoda, Leaf, IceCreamCone, Croissant as CroissantIcon, CakeSlice } from "lucide-react";
 import type { MenuCategory } from "@/lib/menu-data";
 
@@ -22,14 +23,24 @@ const gradientMap: Record<MenuCategory, string> = {
 export default function ProductArt({
   category,
   name,
+  image,
   className = "",
   iconClassName = "h-16 w-16 sm:h-20 sm:w-20",
 }: {
   category: MenuCategory;
   name: string;
+  image?: string | null;
   className?: string;
   iconClassName?: string;
 }) {
+  if (image) {
+    return (
+      <div className={`relative overflow-hidden bg-hola-beige ${className}`}>
+        <Image src={image} alt={name} fill className="object-cover" sizes="(max-width: 640px) 100vw, 400px" />
+      </div>
+    );
+  }
+
   const Icon = iconMap[category];
   const gradient = gradientMap[category];
 
@@ -37,7 +48,7 @@ export default function ProductArt({
     <div
       role="img"
       aria-label={name}
-      className={`relative flex items-center justify-center overflow-hidden bg-linear-to-br ${gradient} ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${gradient} ${className}`}
     >
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/15" />
       <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-white/10" />

@@ -5,12 +5,13 @@ import { Gift, ArrowLeft } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import RewardArt from "@/components/rewards/RewardArt";
 import { useLoyalty } from "@/lib/loyalty-context";
-import { getRewardById } from "@/lib/rewards-data";
+import { getRewardById, rewards as fallbackRewards } from "@/lib/rewards-data";
 
 const statusStyles: Record<string, string> = {
   Redeemed: "bg-emerald-100 text-emerald-700",
   Expired: "bg-gray-200 text-gray-600",
   Pending: "bg-hola-yellow/40 text-hola-brown",
+  Cancelled: "bg-red-100 text-red-600",
 };
 
 export default function RewardHistoryPage() {
@@ -37,7 +38,7 @@ export default function RewardHistoryPage() {
             </div>
           ) : (
             redeemedHistory.map((entry, i) => {
-              const reward = getRewardById(entry.rewardId);
+              const reward = getRewardById(fallbackRewards, entry.rewardId);
               return (
                 <AnimatedSection key={entry.id} delay={i * 0.05}>
                   <div className="flex items-center gap-4 rounded-hola-lg bg-white p-4 shadow-md sm:p-5">

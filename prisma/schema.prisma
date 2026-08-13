@@ -42,6 +42,7 @@ model User {
   sessions Session[]
 
   orders              Order[]
+  walkInOrdersCreated Order[]               @relation("OrdersCreatedByStaff")
   rewardRedemptions   RewardRedemption[]
   pointsHistory       PointsHistory[]
   contactMessages     ContactMessage[]
@@ -172,6 +173,11 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum OrderSource {
+  QR
+  WALK_IN
+}
+
 enum SizeOption {
   SMALL
   MEDIUM
@@ -188,12 +194,17 @@ model Order {
   id          String      @id @default(cuid())
   orderNumber String      @unique
   status      OrderStatus @default(PENDING)
+  source      OrderSource @default(QR)
 
   userId String?
   user   User?   @relation(fields: [userId], references: [id])
 
   guestName  String?
   guestEmail String?
+
+  // Set only for WALK_IN orders — which staff member rang it up.
+  createdByStaffId String?
+  createdByStaff    User?   @relation("OrdersCreatedByStaff", fields: [createdByStaffId], references: [id])
 
   items OrderItem[]
 
@@ -210,12 +221,16 @@ model Order {
 
   pointsAwarded Int @default(0)
 
+  pointsHistoryEntries PointsHistory[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([userId])
   @@index([status])
   @@index([orderNumber])
+  @@index([source])
+  @@index([createdByStaffId])
 }
 
 model OrderItem {
@@ -297,12 +312,14 @@ model PointsHistory {
   userId         String
   user           User     @relation(fields: [userId], references: [id])
   orderId        String?
+  order          Order?   @relation(fields: [orderId], references: [id])
   pointsEarned   Int      @default(0)
   rewardRedeemed String?
   runningTotal   Int
   createdAt      DateTime @default(now())
 
   @@index([userId])
+  @@index([orderId])
 }
 
 // ==========================================================================

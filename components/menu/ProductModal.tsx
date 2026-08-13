@@ -7,13 +7,14 @@ import ProductArt from "./ProductArt";
 import { useCart } from "@/lib/cart-context";
 import {
   sizeAdjustments,
+  sizeOptions,
   sweetnessOptions,
+  formatSize,
+  formatSweetness,
   type MenuProduct,
   type SizeOption,
   type SweetnessOption,
 } from "@/lib/menu-data";
-
-const sizeOptions: SizeOption[] = ["Small", "Medium", "Large"];
 
 export default function ProductModal({
   product,
@@ -23,15 +24,15 @@ export default function ProductModal({
   onClose: () => void;
 }) {
   const { addItem } = useCart();
-  const [size, setSize] = useState<SizeOption>("Medium");
-  const [sweetness, setSweetness] = useState<SweetnessOption>("Original");
+  const [size, setSize] = useState<SizeOption>("MEDIUM");
+  const [sweetness, setSweetness] = useState<SweetnessOption>("ORIGINAL");
   const [instructions, setInstructions] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
 
   function resetAndClose() {
-    setSize("Medium");
-    setSweetness("Original");
+    setSize("MEDIUM");
+    setSweetness("ORIGINAL");
     setInstructions("");
     setQuantity(1);
     setJustAdded(false);
@@ -45,7 +46,7 @@ export default function ProductModal({
 
   function handleAddToOrder() {
     if (!product) return;
-    addItem({ productId: product.id, size, sweetness, instructions, quantity });
+    addItem({ product, size, sweetness, instructions, quantity });
     setJustAdded(true);
     setTimeout(() => {
       resetAndClose();
@@ -56,7 +57,7 @@ export default function ProductModal({
     <AnimatePresence>
       {product && (
         <motion.div
-          className="fixed inset-0 z-110 flex items-end justify-center bg-hola-brown/50 backdrop-blur-sm sm:items-center sm:p-4"
+          className="fixed inset-0 z-[110] flex items-end justify-center bg-hola-brown/50 backdrop-blur-sm sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -74,7 +75,7 @@ export default function ProductModal({
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative h-52 sm:h-64">
-              <ProductArt category={product.category} name={product.name} className="h-full w-full" iconClassName="h-24 w-24" />
+              <ProductArt category={product.category} name={product.name} image={product.image} className="h-full w-full" iconClassName="h-24 w-24" />
               <button
                 onClick={resetAndClose}
                 aria-label="Close details"
@@ -124,7 +125,7 @@ export default function ProductModal({
                         onChange={() => setSize(option)}
                         className="sr-only"
                       />
-                      {option}
+                      {formatSize(option)}
                     </label>
                   ))}
                 </div>
@@ -150,7 +151,7 @@ export default function ProductModal({
                         onChange={() => setSweetness(option)}
                         className="sr-only"
                       />
-                      {option}
+                      {formatSweetness(option)}
                     </label>
                   ))}
                 </div>

@@ -4,7 +4,7 @@ import FloatingDecor from "@/components/FloatingDecor";
 
 export default function NotFound() {
   return (
-    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center">
+    <section className="relative flex min-h-[70vh] items-center justify-center overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center">
       <FloatingDecor />
       <div className="relative mx-auto max-w-lg">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white shadow-md">

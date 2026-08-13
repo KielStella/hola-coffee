@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/rbac";
 import { logActivity } from "@/lib/activity-log";
-import { sendEmail, passwordResetEmail } from "@/lib/email";
+import { checkRateLimit, getClientIdentifier, RateLimitError } from "@/lib/rate-limit";
 import {
   signUpSchema,
   forgotPasswordSchema,
@@ -20,6 +20,13 @@ import {
 type ActionResult = { success: true; message?: string } | { success: false; error: string };
 
 export async function signUp(input: SignUpInput): Promise<ActionResult> {
+  try {
+    await checkRateLimit(`signup:${await getClientIdentifier()}`, 5, 10 * 60_000);
+  } catch (error) {
+    if (error instanceof RateLimitError) return { success: false, error: error.message };
+    throw error;
+  }
+
   const parsed = signUpSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input." };
@@ -48,6 +55,13 @@ export async function signUp(input: SignUpInput): Promise<ActionResult> {
 }
 
 export async function requestPasswordReset(input: ForgotPasswordInput): Promise<ActionResult> {
+  try {
+    await checkRateLimit(`forgot-password:${await getClientIdentifier()}`, 3, 15 * 60_000);
+  } catch (error) {
+    if (error instanceof RateLimitError) return { success: false, error: error.message };
+    throw error;
+  }
+
   const parsed = forgotPasswordSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: parsed.error.issues[0]?.message ?? "Invalid input." };
@@ -69,11 +83,7 @@ export async function requestPasswordReset(input: ForgotPasswordInput): Promise<
   });
 
   const resetUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"}/reset-password/${token}`;
-  await sendEmail({
-    to: email,
-    subject: "Reset your HOLA Coffee password",
-    html: passwordResetEmail(resetUrl),
-  });
+  console.info(`[email disabled] Password reset URL for ${email}: ${resetUrl}`);
 
   return { success: true };
 }

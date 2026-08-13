@@ -34,7 +34,7 @@ export default function SignUpPage() {
     }
     // Auto sign-in after successful sign up
     await signIn("credentials", { email: data.email, password: data.password, redirect: false });
-    router.push("/account");
+    router.push("/");
     router.refresh();
   }
 
@@ -105,6 +105,18 @@ export default function SignUpPage() {
           <UserPlus className="h-4 w-4" />
           {isSubmitting ? "Creating Account…" : "Create Account"}
         </button>
+
+        <p className="text-center text-xs text-hola-brown-soft">
+          By creating an account, you agree to our{" "}
+          <Link href="/terms-and-conditions" className="underline hover:text-hola-brown">
+            Terms &amp; Conditions
+          </Link>{" "}
+          and{" "}
+          <Link href="/privacy-policy" className="underline hover:text-hola-brown">
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </form>
     </AuthCard>
   );

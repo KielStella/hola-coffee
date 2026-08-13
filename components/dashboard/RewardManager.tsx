@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Plus, X } from "lucide-react";
 import { createReward, updateReward, deleteReward } from "@/actions/rewards";
+import ImageUploadField from "./ImageUploadField";
 
 type Reward = {
   id: string;
@@ -11,6 +12,7 @@ type Reward = {
   points: number;
   category: string;
   isAvailable: boolean;
+  image: string | null;
 };
 
 const CATEGORIES = ["COFFEE", "NON_COFFEE", "PASTRIES", "DESSERTS", "MERCHANDISE", "LIMITED_EDITION"] as const;
@@ -26,15 +28,17 @@ function RewardForm({ initial, onDone }: { initial?: Reward; onDone: () => void 
     points: initial?.points ?? 150,
     category: (initial?.category as (typeof CATEGORIES)[number]) ?? CATEGORIES[0],
     isAvailable: initial?.isAvailable ?? true,
+    image: initial?.image ?? "",
   });
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     startTransition(async () => {
+      const payload = { ...form, points: Number(form.points), image: form.image || undefined };
       if (initial) {
-        await updateReward(initial.id, { ...form, points: Number(form.points) });
+        await updateReward(initial.id, payload);
       } else {
-        await createReward({ ...form, points: Number(form.points) });
+        await createReward(payload);
       }
       onDone();
     });
@@ -42,6 +46,12 @@ function RewardForm({ initial, onDone }: { initial?: Reward; onDone: () => void 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 rounded-hola-lg bg-white p-5 shadow-md">
+      <ImageUploadField
+        folder="rewards"
+        value={form.image}
+        onChange={(url) => setForm({ ...form, image: url })}
+        label="Reward Photo"
+      />
       <input
         required
         placeholder="Reward Name"
@@ -146,7 +156,7 @@ export default function RewardManager({ rewards }: { rewards: Reward[] }) {
                   Edit
                 </button>
                 <button
-                  onClick={() => startTransition(() => void deleteReward(reward.id))}
+                  onClick={() => startTransition(() => deleteReward(reward.id))}
                   className="rounded-full border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
                 >
                   Delete

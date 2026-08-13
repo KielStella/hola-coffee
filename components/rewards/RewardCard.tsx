@@ -22,7 +22,7 @@ export default function RewardCard({
     >
       <div className="relative h-40 overflow-hidden">
         <div className={`h-full w-full transition duration-500 ${available ? "group-hover:scale-110" : ""}`}>
-          <RewardArt category={reward.category} name={reward.name} className="h-full w-full" />
+          <RewardArt category={reward.category} name={reward.name} image={reward.image} className="h-full w-full" />
         </div>
         {reward.badge && (
           <span className="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-hola-yellow px-3 py-1 text-xs font-bold uppercase tracking-wide text-hola-brown shadow">

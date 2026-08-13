@@ -4,12 +4,13 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { logActivity } from "@/lib/activity-log";
-import { sendEmail, contactConfirmationEmail, contactAdminNotificationEmail } from "@/lib/email";
+import { checkRateLimit, getClientIdentifier, RateLimitError } from "@/lib/rate-limit";
+import { philippinePhoneSchema } from "@/lib/validations/auth";
 
 const contactSchema = z.object({
   fullName: z.string().min(2),
   email: z.string().email(),
-  phone: z.string().optional(),
+  phone: philippinePhoneSchema,
   subject: z.string().min(3),
   message: z.string().min(10),
 });
@@ -17,6 +18,15 @@ const contactSchema = z.object({
 export type ContactInput = z.infer<typeof contactSchema>;
 
 export async function submitContactMessage(input: ContactInput) {
+  try {
+    await checkRateLimit(`contact:${await getClientIdentifier()}`, 5, 10 * 60_000);
+  } catch (error) {
+    if (error instanceof RateLimitError) {
+      return { success: false as const, error: error.message };
+    }
+    throw error;
+  }
+
   const parsed = contactSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false as const, error: parsed.error.issues[0]?.message ?? "Invalid input." };
@@ -43,25 +53,10 @@ export async function submitContactMessage(input: ContactInput) {
   });
 
   const adminEmail = process.env.BUSINESS_EMAIL;
-  await Promise.all([
-    sendEmail({
-      to: parsed.data.email,
-      subject: "Thank you for contacting HOLA Coffee",
-      html: contactConfirmationEmail(parsed.data.fullName),
-    }),
-    adminEmail
-      ? sendEmail({
-          to: adminEmail,
-          subject: `New inquiry: ${parsed.data.subject}`,
-          html: contactAdminNotificationEmail(
-            parsed.data.fullName,
-            parsed.data.email,
-            parsed.data.subject,
-            parsed.data.message
-          ),
-        })
-      : Promise.resolve(),
-  ]);
+  console.info(`[email disabled] Would send contact confirmation to ${parsed.data.email}`);
+  if (adminEmail) {
+    console.info(`[email disabled] Would notify admin at ${adminEmail} about subject: ${parsed.data.subject}`);
+  }
 
   return { success: true as const };
 }

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAuth, requireRole } from "@/lib/rbac";
 import { logActivity } from "@/lib/activity-log";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const rewardSchema = z.object({
   name: z.string().min(2),
@@ -65,6 +66,7 @@ export async function deleteReward(id: string) {
 /** Customer requests a redemption. Points are reserved but NOT deducted until staff approves. */
 export async function redeemReward(rewardId: string) {
   const session = await requireAuth();
+  await checkRateLimit(`redeem:${session.user.id}`, 10, 10 * 60_000);
 
   const reward = await prisma.reward.findUnique({ where: { id: rewardId } });
   if (!reward || !reward.isAvailable) throw new Error("This reward is not available.");

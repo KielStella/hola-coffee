@@ -37,7 +37,7 @@ export default function ProductIllustration({
     <div
       role="img"
       aria-label={name}
-      className={`relative flex items-center justify-center overflow-hidden bg-linear-to-br ${gradient} ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${gradient} ${className}`}
     >
       <div className="absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/15" />
       <div className="absolute -bottom-8 -left-8 h-28 w-28 rounded-full bg-white/10" />

@@ -15,7 +15,7 @@ const quickLinks = [
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-hola-brown text-hola-beige">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
         <div>
           <Link href="/" className="flex items-center gap-2">
             <Image
@@ -23,7 +23,7 @@ export default function Footer() {
               alt="HOLA Coffee logo"
               width={56}
               height={56}
-              className="h-14 w-14 rounded-hola-sm bg-white/95 p-1"
+              className="h-14 w-14 rounded-[22%] bg-white/95 p-1"
             />
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-hola-beige/80">
@@ -104,7 +104,16 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10 py-6 text-center text-xs text-hola-beige/60">
-        © {new Date().getFullYear()} HOLA Coffee. Designed with love for coffee lovers.
+        <p>© {new Date().getFullYear()} HOLA Coffee. Designed with love for coffee lovers.</p>
+        <div className="mt-2 flex items-center justify-center gap-4">
+          <Link href="/privacy-policy" className="hover:text-white hover:underline">
+            Privacy Policy
+          </Link>
+          <span aria-hidden="true">·</span>
+          <Link href="/terms-and-conditions" className="hover:text-white hover:underline">
+            Terms &amp; Conditions
+          </Link>
+        </div>
       </div>
     </footer>
   );

@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { Mail, Send, CheckCircle2 } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 import FloatingDecor from "@/components/FloatingDecor";
+import { subscribeToNewsletter } from "@/actions/newsletter";
 
 export default function NewsletterSection() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -17,8 +19,15 @@ export default function NewsletterSection() {
       return;
     }
     setError(null);
-    setSubmitted(true);
-    setEmail("");
+    startTransition(async () => {
+      const result = await subscribeToNewsletter(email);
+      if (!result.success) {
+        setError(result.error);
+        return;
+      }
+      setSubmitted(true);
+      setEmail("");
+    });
   }
 
   return (
@@ -57,9 +66,10 @@ export default function NewsletterSection() {
               />
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-hola-yellow px-7 py-3 font-display text-hola-brown shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+                disabled={isPending}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-hola-yellow px-7 py-3 font-display text-hola-brown shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl disabled:opacity-70"
               >
-                <Send className="h-4 w-4" /> Subscribe
+                <Send className="h-4 w-4" /> {isPending ? "Subscribing…" : "Subscribe"}
               </button>
             </form>
           )}

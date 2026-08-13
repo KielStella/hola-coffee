@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { requireRole } from "@/lib/rbac";
 import { logActivity } from "@/lib/activity-log";
-import { sendEmail, orderConfirmationEmail } from "@/lib/email";
+import { checkRateLimit, getClientIdentifier } from "@/lib/rate-limit";
 
 const orderItemSchema = z.object({
   productId: z.string(),
@@ -30,22 +30,14 @@ function generateOrderNumber() {
   return `HOLA-${Math.floor(100000 + Math.random() * 899999)}`;
 }
 
-/**
- * Creates a self-pickup QR order. Works for both logged-in customers and
- * guests (self-pickup ordering shouldn't require an account) — prices are
- * always recomputed server-side from the current product catalog, never
- * trusted from the client.
- */
-export async function createOrder(input: CreateOrderInput) {
-  const parsed = createOrderSchema.parse(input);
-  const session = await auth();
-
-  const productIds = [...new Set(parsed.items.map((i) => i.productId))];
+/** Recomputes item prices server-side from the live product catalog — never trusts client-submitted prices. */
+async function resolveOrderItems(items: z.infer<typeof orderItemSchema>[]) {
+  const productIds = [...new Set(items.map((i) => i.productId))];
   const products = await prisma.product.findMany({ where: { id: { in: productIds } } });
   const productMap = new Map(products.map((p) => [p.id, p]));
 
   let subtotal = 0;
-  const itemsData = parsed.items.map((item) => {
+  const itemsData = items.map((item) => {
     const product = productMap.get(item.productId);
     if (!product || !product.isAvailable) {
       throw new Error(`"${product?.name ?? item.productId}" is currently unavailable.`);
@@ -63,9 +55,31 @@ export async function createOrder(input: CreateOrderInput) {
     };
   });
 
+  return { itemsData, subtotal };
+}
+
+/**
+ * Creates a self-pickup QR order. Works for both logged-in customers and
+ * guests (self-pickup ordering shouldn't require an account) — prices are
+ * always recomputed server-side from the current product catalog, never
+ * trusted from the client.
+ */
+export async function createOrder(input: CreateOrderInput) {
+  const parsed = createOrderSchema.parse(input);
+  const session = await auth();
+
+  await checkRateLimit(
+    `order:${session?.user?.id ?? (await getClientIdentifier())}`,
+    10,
+    10 * 60_000
+  );
+
+  const { itemsData, subtotal } = await resolveOrderItems(parsed.items);
+
   const order = await prisma.order.create({
     data: {
       orderNumber: generateOrderNumber(),
+      source: "QR",
       userId: session?.user?.id,
       guestName: session?.user ? undefined : parsed.guestName,
       guestEmail: session?.user ? undefined : parsed.guestEmail,
@@ -85,12 +99,59 @@ export async function createOrder(input: CreateOrderInput) {
 
   const recipientEmail = session?.user?.email ?? parsed.guestEmail;
   if (recipientEmail) {
-    await sendEmail({
-      to: recipientEmail,
-      subject: `Your HOLA Coffee order ${order.orderNumber}`,
-      html: orderConfirmationEmail(order.orderNumber, order.total),
-    });
+    console.info(`[email disabled] Would send order confirmation to ${recipientEmail} for order ${order.orderNumber}`);
   }
+
+  return order;
+}
+
+const createWalkInOrderSchema = z.object({
+  items: z.array(orderItemSchema).min(1),
+  customerName: z.string().optional(),
+});
+
+export type CreateWalkInOrderInput = z.infer<typeof createWalkInOrderSchema>;
+
+/**
+ * Staff/Admin manually ring up a walk-in (in-person) order using the same
+ * product catalog and pricing logic as QR orders. Since the customer is
+ * physically at the counter, the order starts CONFIRMED (no QR scan needed)
+ * rather than PENDING.
+ */
+export async function createWalkInOrder(input: CreateWalkInOrderInput) {
+  const session = await requireRole("ADMIN", "STAFF");
+  const parsed = createWalkInOrderSchema.parse(input);
+
+  const { itemsData, subtotal } = await resolveOrderItems(parsed.items);
+  const now = new Date();
+
+  const order = await prisma.order.create({
+    data: {
+      orderNumber: generateOrderNumber(),
+      source: "WALK_IN",
+      status: "CONFIRMED",
+      guestName: parsed.customerName,
+      createdByStaffId: session.user.id,
+      subtotal,
+      total: subtotal,
+      scannedAt: now,
+      confirmedAt: now,
+      items: { create: itemsData },
+    },
+    include: { items: true },
+  });
+
+  await logActivity({
+    userId: session.user.id,
+    action: `Staff created walk-in order ${order.orderNumber}`,
+    entity: "Order",
+    entityId: order.id,
+  });
+
+  revalidatePath("/admin/orders");
+  revalidatePath("/admin");
+  revalidatePath("/staff-portal/orders");
+  revalidatePath("/staff-portal");
 
   return order;
 }

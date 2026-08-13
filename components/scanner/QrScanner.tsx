@@ -45,7 +45,19 @@ export default function QrScanner({ onScan }: { onScan: (decodedText: string) =>
       cancelled = true;
       const scanner = scannerRef.current;
       if (scanner) {
-        scanner.stop().catch(() => {}).finally(() => scanner.clear());
+        try {
+          const maybePromise = scanner.stop();
+          if (maybePromise && typeof (maybePromise as any).then === "function") {
+            (maybePromise as Promise<void>).catch(() => {}).finally(() => scanner.clear());
+          } else {
+            // stop may throw synchronously in some versions; still ensure clear()
+            scanner.clear();
+          }
+        } catch {
+          try {
+            scanner.clear();
+          } catch {}
+        }
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -9,7 +9,7 @@ export default function ProductCard({
   product: MenuProduct;
   onViewDetails: (product: MenuProduct) => void;
 }) {
-  const soldOut = product.tag === "SOLD OUT";
+  const soldOut = product.tag === "SOLD_OUT";
 
   return (
     <article
@@ -17,13 +17,22 @@ export default function ProductCard({
         soldOut ? "" : "hover:-translate-y-2 hover:shadow-2xl"
       }`}
     >
-      <div className="relative h-44 overflow-hidden">
+      <button
+        type="button"
+        disabled={soldOut}
+        onClick={() => onViewDetails(product)}
+        aria-disabled={soldOut}
+        aria-label={soldOut ? `${product.name} — currently unavailable` : `View details for ${product.name}`}
+        className={`relative block h-44 w-full overflow-hidden text-left ${
+          soldOut ? "cursor-not-allowed" : "cursor-pointer"
+        }`}
+      >
         <div
           className={`h-full w-full transition duration-500 ${
             soldOut ? "opacity-40 grayscale" : "group-hover:scale-110"
           }`}
         >
-          <ProductArt category={product.category} name={product.name} className="h-full w-full" />
+          <ProductArt category={product.category} name={product.name} image={product.image} className="h-full w-full" />
         </div>
         {product.tag && (
           <span className="absolute left-4 top-4">
@@ -37,7 +46,7 @@ export default function ProductCard({
             </span>
           </div>
         )}
-      </div>
+      </button>
       <div className="p-5">
         <div className="flex items-start justify-between gap-3">
           <h3 className="text-lg text-hola-brown">{product.name}</h3>

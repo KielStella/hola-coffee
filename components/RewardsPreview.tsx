@@ -7,8 +7,8 @@ const iconMap = { Coffee, Pastries: Croissant, Desserts: CakeSlice, "Gift Items"
 
 export default function RewardsPreview() {
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-hola-blue-dark to-hola-blue px-4 py-20 text-white sm:py-28">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden bg-gradient-to-br from-hola-blue-dark to-hola-blue px-4 py-20 text-white sm:py-28">
+      <div className="mx-auto max-w-[1280px]">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl sm:text-4xl">Earn Rewards Every Visit</h2>
           <p className="mt-3 text-white/85">

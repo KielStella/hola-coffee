@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import QRCode from "react-qr-code";
 import { Download, Save, ArrowLeft, Info, ShoppingBag } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { formatSize, formatSweetness } from "@/lib/menu-data";
 
 function formatDateTime(iso: string) {
   const date = new Date(iso);
@@ -40,8 +41,7 @@ export default function OrderQrPage() {
 
   const order = lastOrder;
   const { date, time } = formatDateTime(order.createdAt);
-  const qrToken = order.qrToken;
-  const qrPayload = qrToken;
+  const qrPayload = order.qrToken;
 
   function downloadAsSvg() {
     const svg = qrWrapperRef.current?.querySelector("svg");
@@ -134,7 +134,7 @@ export default function OrderQrPage() {
                   </p>
                 </div>
                 <p className="mt-1 text-xs text-hola-brown-soft">
-                  {item.size} • {item.sweetness}
+                  {formatSize(item.size)} • {formatSweetness(item.sweetness)}
                 </p>
                 {item.instructions && (
                   <p className="mt-1 text-xs italic text-hola-brown-soft/80">&ldquo;{item.instructions}&rdquo;</p>

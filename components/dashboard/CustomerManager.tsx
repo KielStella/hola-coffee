@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Search } from "lucide-react";
 import { searchCustomers, deactivateCustomerAccount, resetCustomerPassword } from "@/actions/customers";
+import TempPasswordModal from "./TempPasswordModal";
 
 type Customer = {
   id: string;
@@ -17,6 +18,7 @@ export default function CustomerManager({ initialCustomers }: { initialCustomers
   const [customers, setCustomers] = useState(initialCustomers);
   const [query, setQuery] = useState("");
   const [isPending, startTransition] = useTransition();
+  const [resetFor, setResetFor] = useState<{ name: string; password: string } | null>(null);
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -58,7 +60,7 @@ export default function CustomerManager({ initialCustomers }: { initialCustomers
                 onClick={() =>
                   startTransition(async () => {
                     const { temporaryPassword } = await resetCustomerPassword(c.id);
-                    alert(`Temporary password for ${c.name}: ${temporaryPassword}`);
+                    setResetFor({ name: c.name ?? "this customer", password: temporaryPassword });
                   })
                 }
                 className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
@@ -81,6 +83,14 @@ export default function CustomerManager({ initialCustomers }: { initialCustomers
         ))}
         {customers.length === 0 && <p className="text-sm text-hola-brown-soft">No customers found.</p>}
       </div>
+
+      {resetFor && (
+        <TempPasswordModal
+          userName={resetFor.name}
+          password={resetFor.password}
+          onClose={() => setResetFor(null)}
+        />
+      )}
     </div>
   );
 }

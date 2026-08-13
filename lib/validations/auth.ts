@@ -32,9 +32,15 @@ export const resetPasswordSchema = z
     path: ["confirmPassword"],
   });
 
+export const philippinePhoneSchema = z
+  .string()
+  .regex(/^\+63\d{10}$/, "Enter a valid 10-digit PH mobile number.")
+  .optional()
+  .or(z.literal(""));
+
 export const updateProfileSchema = z.object({
   name: z.string().min(2, "Please enter your full name."),
-  phone: z.string().optional(),
+  phone: philippinePhoneSchema,
   image: z.string().url().optional().or(z.literal("")),
 });
 

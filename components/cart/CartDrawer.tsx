@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { X, Plus, Minus, Trash2, ShoppingBag, QrCode, Info } from "lucide-react";
 import ProductArt from "../menu/ProductArt";
 import { useCart } from "@/lib/cart-context";
-import { getProductById } from "@/lib/menu-data";
+import { formatSize, formatSweetness } from "@/lib/menu-data";
 
 export default function CartDrawer() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function CartDrawer() {
     <AnimatePresence>
       {isDrawerOpen && (
         <motion.div
-          className="fixed inset-0 z-120 flex justify-end bg-hola-brown/40 backdrop-blur-sm"
+          className="fixed inset-0 z-[120] flex justify-end bg-hola-brown/40 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -84,20 +84,18 @@ export default function CartDrawer() {
               ) : (
                 <ul className="space-y-4">
                   {items.map((item) => {
-                    const product = getProductById(item.productId);
                     return (
                       <li
                         key={item.cartItemId}
                         className="flex gap-3 rounded-hola-md border border-hola-beige p-3"
                       >
-                        {product && (
-                          <ProductArt
-                            category={product.category}
-                            name={product.name}
-                            className="h-16 w-16 shrink-0 rounded-hola-sm"
-                            iconClassName="h-8 w-8"
-                          />
-                        )}
+                        <ProductArt
+                          category={item.category}
+                          name={item.name}
+                          image={item.image}
+                          className="h-16 w-16 shrink-0 rounded-hola-sm"
+                          iconClassName="h-8 w-8"
+                        />
                         <div className="flex-1">
                           <div className="flex items-start justify-between gap-2">
                             <p className="font-display text-sm text-hola-brown">{item.name}</p>
@@ -110,7 +108,7 @@ export default function CartDrawer() {
                             </button>
                           </div>
                           <p className="mt-0.5 text-xs text-hola-brown-soft">
-                            {item.size} • {item.sweetness}
+                            {formatSize(item.size)} • {formatSweetness(item.sweetness)}
                           </p>
                           {item.instructions && (
                             <p className="mt-0.5 text-xs italic text-hola-brown-soft/80">

@@ -7,7 +7,7 @@ const iconMap = { Leaf, Coffee, Sofa, Smile };
 export default function WhyChooseHola() {
   return (
     <section className="relative bg-hola-beige px-4 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-[1280px]">
         <AnimatedSection className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl text-hola-brown sm:text-4xl">Why Choose HOLA</h2>
           <p className="mt-3 text-hola-brown-soft">

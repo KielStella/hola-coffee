@@ -15,6 +15,7 @@ import { LoyaltyProvider } from "@/lib/loyalty-context";
 import CartButton from "@/components/cart/CartButton";
 import CartDrawer from "@/components/cart/CartDrawer";
 import AuthSessionProvider from "@/components/auth/AuthSessionProvider";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 const siteUrl = "https://holacoffee.ph";
 
@@ -44,10 +45,6 @@ export const metadata: Metadata = {
     description:
       "Freshly brewed coffee, handcrafted drinks, and cozy moments made for everyone at HOLA Coffee.",
     images: ["/images/hola-logo.png"],
-  },
-  icons: {
-    icon: "/images/hola-logo.png",
-    apple: "/images/hola-logo.png",
   },
 };
 
@@ -84,13 +81,14 @@ export default function RootLayout({
         />
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-200 focus:rounded-full focus:bg-hola-blue focus:px-4 focus:py-2 focus:text-white"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[200] focus:rounded-full focus:bg-hola-blue focus:px-4 focus:py-2 focus:text-white"
         >
           Skip to main content
         </a>
-        <CartProvider>
-          <LoyaltyProvider>
-            <AuthSessionProvider>
+        <ServiceWorkerRegistration />
+        <AuthSessionProvider>
+          <CartProvider>
+            <LoyaltyProvider>
               <Navbar />
               <main id="main-content" className="flex-1">
                 {children}
@@ -98,9 +96,9 @@ export default function RootLayout({
               <Footer />
               <CartButton />
               <CartDrawer />
-            </AuthSessionProvider>
-          </LoyaltyProvider>
-        </CartProvider>
+            </LoyaltyProvider>
+          </CartProvider>
+        </AuthSessionProvider>
       </body>
     </html>
   );

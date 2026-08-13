@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function OurStoryPage() {
   return (
     <>
-      <section className="relative overflow-hidden bg-linear-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
+      <section className="relative overflow-hidden bg-gradient-to-b from-hola-blue/15 to-hola-beige px-4 py-20 text-center sm:py-28">
         <FloatingDecor variant="beans" />
         <div className="relative mx-auto max-w-3xl">
           <AnimatedSection>
@@ -37,7 +37,7 @@ export default function OurStoryPage() {
       <WaveDivider color="var(--hola-beige)" />
 
       <section className="bg-hola-beige px-4 py-16 sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-6 sm:grid-cols-3">
+        <div className="mx-auto grid max-w-[1280px] gap-6 sm:grid-cols-3">
           <AnimatedSection>
             <div className="h-full rounded-hola-lg bg-white p-8 shadow-md">
               <Target className="h-9 w-9 text-hola-blue-dark" strokeWidth={1.75} />
@@ -72,7 +72,7 @@ export default function OurStoryPage() {
       </section>
 
       <section className="bg-white px-4 py-20 sm:py-28">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-[1280px]">
           <AnimatedSection className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl text-hola-brown sm:text-4xl">Our Journey</h2>
             <p className="mt-3 text-hola-brown-soft">From a small dream to a home away from home.</p>

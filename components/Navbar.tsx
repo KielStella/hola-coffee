@@ -49,7 +49,7 @@ export default function Navbar() {
       >
         <nav
           aria-label="Primary"
-          className="mx-auto grid max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8"
+          className="mx-auto grid max-w-[1280px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6 lg:px-8"
         >
           <div className="hidden items-center gap-6 lg:col-start-1 lg:flex">
             {primaryNavLinksLeft.map((link) => (
@@ -116,7 +116,7 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="border-t border-hola-beige bg-white lg:hidden"
           >
-            <div className="mx-auto flex max-w-7xl flex-col gap-1 px-6 py-4">
+            <div className="mx-auto flex max-w-[1280px] flex-col gap-1 px-6 py-4">
               {[...primaryNavLinksLeft, ...primaryNavLinksRight].map((link) => (
                 <Link
                   key={link.href}

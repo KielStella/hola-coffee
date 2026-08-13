@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Plus, X } from "lucide-react";
 import { createProduct, updateProduct, deleteProduct, toggleProductAvailability } from "@/actions/menu";
+import ImageUploadField from "./ImageUploadField";
 
 type Category = { id: string; label: string; name: string };
 type Product = {
@@ -14,6 +15,7 @@ type Product = {
   tag: string | null;
   isAvailable: boolean;
   categoryId: string;
+  image: string | null;
   category: Category;
 };
 
@@ -38,6 +40,7 @@ function ProductForm({
     tag: initial?.tag ?? "",
     categoryId: initial?.categoryId ?? categories[0]?.id ?? "",
     isAvailable: initial?.isAvailable ?? true,
+    image: initial?.image ?? "",
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -52,6 +55,7 @@ function ProductForm({
         categoryId: form.categoryId,
         isAvailable: form.isAvailable,
         isFeatured: false,
+        image: form.image || undefined,
       };
       if (initial) {
         await updateProduct(initial.id, payload);
@@ -64,6 +68,12 @@ function ProductForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 rounded-hola-lg bg-white p-5 shadow-md">
+      <ImageUploadField
+        folder="menu"
+        value={form.image}
+        onChange={(url) => setForm({ ...form, image: url })}
+        label="Product Photo"
+      />
       <div className="grid gap-3 sm:grid-cols-2">
         <input
           required
@@ -178,11 +188,7 @@ export default function MenuManager({ categories, products }: { categories: Cate
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    startTransition(() => {
-                      void toggleProductAvailability(product.id, !product.isAvailable);
-                    })
-                  }
+                  onClick={() => startTransition(() => toggleProductAvailability(product.id, !product.isAvailable))}
                   className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
                 >
                   {product.isAvailable ? "Mark Sold Out" : "Mark Available"}
@@ -194,11 +200,7 @@ export default function MenuManager({ categories, products }: { categories: Cate
                   Edit
                 </button>
                 <button
-                  onClick={() =>
-                    startTransition(() => {
-                      void deleteProduct(product.id);
-                    })
-                  }
+                  onClick={() => startTransition(() => deleteProduct(product.id))}
                   className="rounded-full border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
                 >
                   Delete

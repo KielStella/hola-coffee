@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Coffee, Leaf, Croissant as CroissantIcon, CakeSlice, Gift, Shirt } from "lucide-react";
 import type { RewardCategory } from "@/lib/rewards-data";
 
@@ -22,14 +23,24 @@ const gradientMap: Record<RewardCategory, string> = {
 export default function RewardArt({
   category,
   name,
+  image,
   className = "",
   iconClassName = "h-14 w-14 sm:h-16 sm:w-16",
 }: {
   category: RewardCategory;
   name: string;
+  image?: string | null;
   className?: string;
   iconClassName?: string;
 }) {
+  if (image) {
+    return (
+      <div className={`relative overflow-hidden bg-hola-beige ${className}`}>
+        <Image src={image} alt={name} fill className="object-cover" sizes="(max-width: 640px) 100vw, 400px" />
+      </div>
+    );
+  }
+
   const Icon = iconMap[category];
   const gradient = gradientMap[category];
 
@@ -37,7 +48,7 @@ export default function RewardArt({
     <div
       role="img"
       aria-label={name}
-      className={`relative flex items-center justify-center overflow-hidden bg-linear-to-br ${gradient} ${className}`}
+      className={`relative flex items-center justify-center overflow-hidden bg-gradient-to-br ${gradient} ${className}`}
     >
       <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-white/15" />
       <div className="absolute -bottom-8 -left-8 h-24 w-24 rounded-full bg-white/10" />

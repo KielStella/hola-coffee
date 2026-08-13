@@ -3,6 +3,7 @@
 import { useState, useTransition } from "react";
 import { Plus, X } from "lucide-react";
 import { createStaffAccount, deactivateStaffAccount, resetStaffPassword } from "@/actions/staff";
+import TempPasswordModal from "./TempPasswordModal";
 
 type Staff = {
   id: string;
@@ -66,7 +67,7 @@ function StaffForm({ onDone }: { onDone: () => void }) {
 export default function StaffManager({ staff }: { staff: Staff[] }) {
   const [creating, setCreating] = useState(false);
   const [, startTransition] = useTransition();
-  const [resetFor, setResetFor] = useState<string | null>(null);
+  const [resetFor, setResetFor] = useState<{ name: string; password: string } | null>(null);
 
   return (
     <div>
@@ -97,17 +98,13 @@ export default function StaffManager({ staff }: { staff: Staff[] }) {
               <p className="text-xs text-hola-brown-soft">
                 {s.email} {!s.isActive && "· Deactivated"}
               </p>
-              {resetFor === s.id && (
-                <p className="mt-1 text-xs text-hola-blue-dark">Password reset — check the temporary password dialog.</p>
-              )}
             </div>
             <div className="flex gap-2">
               <button
                 onClick={() =>
                   startTransition(async () => {
                     const { temporaryPassword } = await resetStaffPassword(s.id);
-                    setResetFor(s.id);
-                    alert(`Temporary password for ${s.name}: ${temporaryPassword}`);
+                    setResetFor({ name: s.name ?? "this staff member", password: temporaryPassword });
                   })
                 }
                 className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
@@ -115,7 +112,7 @@ export default function StaffManager({ staff }: { staff: Staff[] }) {
                 Reset Password
               </button>
               <button
-                onClick={() => startTransition(() => void deactivateStaffAccount(s.id, !s.isActive))}
+                onClick={() => startTransition(() => deactivateStaffAccount(s.id, !s.isActive))}
                 className="rounded-full border border-hola-brown/15 px-3 py-1.5 text-xs text-hola-brown hover:bg-hola-beige"
               >
                 {s.isActive ? "Deactivate" : "Reactivate"}
@@ -124,6 +121,14 @@ export default function StaffManager({ staff }: { staff: Staff[] }) {
           </div>
         ))}
       </div>
+
+      {resetFor && (
+        <TempPasswordModal
+          userName={resetFor.name}
+          password={resetFor.password}
+          onClose={() => setResetFor(null)}
+        />
+      )}
     </div>
   );
 }

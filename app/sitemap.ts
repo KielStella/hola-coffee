@@ -12,6 +12,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/rewards/history",
     "/rewards/points",
     "/contact",
+    "/privacy-policy",
+    "/terms-and-conditions",
   ];
 
   return routes.map((route) => ({

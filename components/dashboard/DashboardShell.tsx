@@ -62,7 +62,7 @@ export default function DashboardShell({
       {/* Desktop sidebar */}
       <aside className="hidden w-64 shrink-0 flex-col bg-hola-brown text-white lg:flex">
         <div className="flex items-center gap-2 px-5 py-5">
-          <Image src="/images/hola-logo.png" alt="HOLA Coffee" width={36} height={36} className="h-9 w-9 rounded-hola-sm" />
+          <Image src="/images/hola-logo.png" alt="HOLA Coffee" width={36} height={36} className="h-9 w-9 rounded-[22%]" />
           <span className="font-display text-lg">{title}</span>
         </div>
         <NavLinksList navItems={navItems} pathname={pathname} onNavigate={() => setMobileOpen(false)} />
@@ -91,7 +91,7 @@ export default function DashboardShell({
         </header>
 
         {mobileOpen && (
-          <div className="fixed inset-0 z-200 flex lg:hidden">
+          <div className="fixed inset-0 z-[200] flex lg:hidden">
             <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
             <div className="relative flex w-72 flex-col bg-hola-brown text-white">
               <div className="flex items-center justify-between px-5 py-5">

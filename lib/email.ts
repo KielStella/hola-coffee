@@ -1,20 +1,5 @@
-import nodemailer from "nodemailer";
-
-const smtpConfigured = Boolean(
-  process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASSWORD
-);
-
-const transporter = smtpConfigured
-  ? nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT ?? 587),
-      secure: Number(process.env.SMTP_PORT) === 465,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASSWORD,
-      },
-    })
-  : null;
+// Email functionality disabled — provide no-op implementations so the
+// rest of the app can import these helpers without requiring SMTP.
 
 type SendEmailInput = {
   to: string;
@@ -22,24 +7,9 @@ type SendEmailInput = {
   html: string;
 };
 
-/**
- * Sends an email via Gmail SMTP. If SMTP env vars are not configured
- * (e.g. local development without credentials), this logs instead of
- * throwing, so the rest of the app keeps working.
- */
 export async function sendEmail({ to, subject, html }: SendEmailInput) {
-  if (!transporter) {
-    console.warn(`[email] SMTP not configured — skipped email to ${to}: "${subject}"`);
-    return { sent: false };
-  }
-
-  await transporter.sendMail({
-    from: `"HOLA Coffee" <${process.env.SMTP_USER}>`,
-    to,
-    subject,
-    html,
-  });
-  return { sent: true };
+  console.info(`[email disabled] would send to=${to} subject=${subject}`);
+  return { sent: false };
 }
 
 const wrapper = (title: string, body: string) => `
