@@ -2,6 +2,12 @@ import { prisma } from "@/lib/prisma";
 import RewardsBrowser from "@/components/rewards/RewardsBrowser";
 import { rewards as fallbackRewards, formatRewardCategory, type Reward } from "@/lib/rewards-data";
 
+export const metadata = {
+  title: "HOLA Rewards",
+  description: "Earn points with every HOLA Coffee visit and redeem them for drinks, treats, and exclusive merchandise.",
+  alternates: { canonical: "/rewards" },
+};
+
 export const dynamic = "force-dynamic";
 
 async function getRewards(): Promise<Reward[]> {

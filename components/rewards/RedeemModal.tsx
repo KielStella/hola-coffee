@@ -51,14 +51,14 @@ export default function RedeemModal({
           aria-label={`Redeem ${reward.name}`}
         >
           <motion.div
-            className="hola-shadow w-full max-w-md overflow-hidden rounded-hola-lg bg-white"
+            className="hola-shadow w-full max-w-lg overflow-hidden rounded-[2.5rem] bg-white"
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="relative h-40">
+            <div className="relative h-52">
               <RewardArt category={reward.category} name={reward.name} image={reward.image} className="h-full w-full" iconClassName="h-16 w-16" />
               <button
                 onClick={onClose}
@@ -70,7 +70,8 @@ export default function RedeemModal({
             </div>
 
             <div className="p-6 sm:p-8">
-              <h2 className="text-2xl text-hola-brown">{reward.name}</h2>
+              <p className="text-xs font-bold uppercase tracking-[.16em] text-hola-blue-dark">{reward.category}</p>
+              <h2 className="mt-1 text-3xl text-hola-brown">{reward.name}</h2>
               <p className="mt-2 text-sm leading-relaxed text-hola-brown-soft">{reward.description}</p>
 
               <div className="mt-5 space-y-2 rounded-hola-sm bg-hola-beige p-4 text-sm">
@@ -96,7 +97,7 @@ export default function RedeemModal({
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <button
                   onClick={handleConfirmRedeem}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-hola-blue px-6 py-3 font-display text-white shadow-lg shadow-hola-blue/30 transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl"
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-hola-brown px-6 py-3 font-display text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-hola-blue-dark hover:shadow-xl"
                 >
                   Redeem Reward
                 </button>

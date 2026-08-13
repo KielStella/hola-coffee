@@ -1,54 +1,16 @@
-import { Sparkles } from "lucide-react";
+import { ArrowUpRight, CheckCircle2, LockKeyhole, Sparkles } from "lucide-react";
 import RewardArt from "./RewardArt";
 import type { Reward } from "@/lib/rewards-data";
 
-export default function RewardCard({
-  reward,
-  currentPoints,
-  onRedeem,
-}: {
-  reward: Reward;
-  currentPoints: number;
-  onRedeem: (reward: Reward) => void;
-}) {
+export default function RewardCard({ reward, currentPoints, onRedeem }: { reward: Reward; currentPoints: number; onRedeem: (reward: Reward) => void }) {
   const available = currentPoints >= reward.points;
-  const pointsNeeded = reward.points - currentPoints;
-
-  return (
-    <div
-      className={`group h-full overflow-hidden rounded-hola-lg bg-white shadow-md ring-1 ring-hola-brown/5 transition duration-300 ${
-        available ? "hover:-translate-y-2 hover:shadow-2xl" : "opacity-60"
-      }`}
-    >
-      <div className="relative h-40 overflow-hidden">
-        <div className={`h-full w-full transition duration-500 ${available ? "group-hover:scale-110" : ""}`}>
-          <RewardArt category={reward.category} name={reward.name} image={reward.image} className="h-full w-full" />
-        </div>
-        {reward.badge && (
-          <span className="absolute left-4 top-4 flex items-center gap-1 rounded-full bg-hola-yellow px-3 py-1 text-xs font-bold uppercase tracking-wide text-hola-brown shadow">
-            <Sparkles className="h-3 w-3" /> {reward.badge}
-          </span>
-        )}
-      </div>
-      <div className="p-5">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg text-hola-brown">{reward.name}</h3>
-          <span className="whitespace-nowrap font-display text-hola-blue-dark">{reward.points} pts</span>
-        </div>
-        <p className="mt-1.5 text-sm leading-relaxed text-hola-brown-soft">{reward.description}</p>
-        <button
-          type="button"
-          disabled={!available}
-          onClick={() => onRedeem(reward)}
-          className={`mt-4 w-full rounded-full px-5 py-2.5 text-sm font-display transition ${
-            available
-              ? "bg-hola-brown text-white shadow-[0_0_0_0_rgba(90,169,230,0)] hover:bg-hola-blue-dark hover:shadow-[0_0_20px_2px_rgba(90,169,230,0.45)]"
-              : "cursor-not-allowed bg-gray-200 text-gray-500"
-          }`}
-        >
-          {available ? "Redeem Reward" : `Need ${pointsNeeded} More Points`}
-        </button>
-      </div>
+  const pointsNeeded = Math.max(0, reward.points - currentPoints);
+  const progress = Math.min(100, (currentPoints / reward.points) * 100);
+  return <article className={`group flex h-full flex-col overflow-hidden rounded-[2.25rem] border bg-white shadow-[0_18px_50px_-35px_rgba(74,51,37,.65)] transition duration-500 ${available ? "border-hola-yellow/50 hover:-translate-y-2 hover:shadow-2xl" : "border-hola-brown/[.07]"}`}>
+    <div className="relative h-56 overflow-hidden"><div className={`h-full transition duration-700 ${available ? "group-hover:scale-110 group-hover:rotate-1" : "grayscale-[.2]"}`}><RewardArt category={reward.category} name={reward.name} image={reward.image} className="h-full w-full" iconClassName="h-20 w-20" /></div><div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent" />{reward.badge && <span className="absolute left-5 top-5 flex items-center gap-1.5 rounded-full bg-hola-yellow px-3 py-1.5 text-xs font-bold uppercase tracking-wider text-hola-brown shadow"><Sparkles className="h-3.5 w-3.5" />{reward.badge}</span>}<span className={`absolute bottom-5 right-5 flex h-11 w-11 items-center justify-center rounded-full shadow-lg ${available ? "bg-hola-yellow text-hola-brown" : "bg-white text-hola-brown-soft"}`}>{available ? <CheckCircle2 className="h-5 w-5" /> : <LockKeyhole className="h-5 w-5" />}</span></div>
+    <div className="flex flex-1 flex-col p-6"><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.14em] text-hola-blue-dark">{reward.category}</p><h3 className="mt-2 text-2xl leading-tight text-hola-brown">{reward.name}</h3></div><span className="shrink-0 rounded-full bg-hola-beige px-3 py-1.5 font-display text-hola-brown">{reward.points} pts</span></div><p className="mt-3 flex-1 text-sm leading-7 text-hola-brown-soft">{reward.description}</p>
+      <div className="mt-5"><div className="mb-2 flex justify-between text-xs"><span className={available ? "font-semibold text-emerald-700" : "text-hola-brown-soft"}>{available ? "Ready to redeem" : `${pointsNeeded} points to go`}</span><span className="text-hola-brown-soft">{Math.round(progress)}%</span></div><div className="h-2 overflow-hidden rounded-full bg-hola-beige"><div style={{width:`${progress}%`}} className={`h-full rounded-full transition-all duration-700 ${available ? "bg-emerald-500" : "bg-gradient-to-r from-hola-blue to-hola-yellow"}`} /></div></div>
+      <button type="button" disabled={!available} onClick={() => onRedeem(reward)} className={`mt-5 flex w-full items-center justify-between border-t border-hola-brown/[.07] pt-4 font-display transition ${available ? "text-hola-brown hover:text-hola-blue-dark" : "cursor-not-allowed text-hola-brown-soft/50"}`}><span>{available ? "Redeem this reward" : "Keep collecting"}</span><ArrowUpRight className="h-5 w-5" /></button>
     </div>
-  );
+  </article>;
 }
