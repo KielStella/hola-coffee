@@ -8,7 +8,7 @@ const providers = [
   { id: "facebook", label: "Facebook — Coming Soon", Icon: FacebookLogoIcon, disabled: true },
 ] as const;
 
-export default function SocialLoginButtons({ callbackUrl = "/account" }: { callbackUrl?: string }) {
+export default function SocialLoginButtons() {
   return (
     <div className="space-y-3">
       {providers.map(({ id, label, Icon, disabled }) => (
@@ -16,7 +16,7 @@ export default function SocialLoginButtons({ callbackUrl = "/account" }: { callb
           key={id}
           type="button"
           disabled={disabled}
-          onClick={disabled ? undefined : () => signIn(id, { callbackUrl })}
+          onClick={disabled ? undefined : () => signIn(id, { callbackUrl: "/auth/redirect" })}
           aria-label={disabled ? "Facebook login coming soon" : label}
           className={
             disabled

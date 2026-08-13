@@ -34,7 +34,7 @@ export default function SignUpPage() {
     }
     // Auto sign-in after successful sign up
     await signIn("credentials", { email: data.email, password: data.password, redirect: false });
-    router.push("/");
+    router.replace("/auth/redirect");
     router.refresh();
   }
 
@@ -51,7 +51,7 @@ export default function SignUpPage() {
         </p>
       }
     >
-      <SocialLoginButtons callbackUrl="/account" />
+      <SocialLoginButtons />
 
       <div className="my-6 flex items-center gap-3">
         <div className="h-px flex-1 bg-hola-beige" />
