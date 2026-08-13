@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
-import { FacebookIcon, InstagramIcon } from "./SocialIcons";
+import { FacebookIcon, InstagramIcon, TikTokIcon } from "./SocialIcons";
 import { businessInfo } from "@/lib/data";
 
 const quickLinks = [
@@ -47,6 +47,15 @@ export default function Footer() {
               className="rounded-full bg-white/10 p-2.5 transition hover:bg-hola-blue"
             >
               <InstagramIcon className="h-4 w-4" />
+            </a>
+            <a
+              href={businessInfo.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="HOLA Coffee on TikTok"
+              className="rounded-full bg-white/10 p-2.5 transition hover:-translate-y-0.5 hover:bg-hola-yellow hover:text-hola-brown"
+            >
+              <TikTokIcon className="h-4 w-4" />
             </a>
           </div>
         </div>

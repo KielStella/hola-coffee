@@ -236,6 +236,7 @@ export const businessInfo = {
   email: "hello@holacoffee.ph",
   facebook: "https://facebook.com/holacoffee",
   instagram: "https://instagram.com/holacoffee",
+  tiktok: "https://www.tiktok.com/@holacoffee",
   mapsEmbedUrl:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3860.6!2d121.0437!3d14.6760!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDQwJzMzLjYiTiAxMjHCsDAyJzM3LjMiRQ!5e0!3m2!1sen!2sph",
 };
