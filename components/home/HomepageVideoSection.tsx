@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { Coffee, Heart, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Coffee, Heart, Maximize, Pause, Play, Sparkles, Volume2, VolumeX } from "lucide-react";
 import AnimatedSection from "@/components/AnimatedSection";
 
 function getTikTokVideoId(url: string) {
@@ -46,7 +46,9 @@ export default function HomepageVideoSection({
 }) {
   const tiktokId = type === "tiktok" && url ? getTikTokVideoId(url) : null;
   const tiktokPlayerRef = useRef<HTMLIFrameElement>(null);
+  const tiktokFrameRef = useRef<HTMLDivElement>(null);
   const [isTikTokMuted, setIsTikTokMuted] = useState(true);
+  const [isTikTokPlaying, setIsTikTokPlaying] = useState(true);
 
   useEffect(() => {
     function handlePlayerMessage(event: MessageEvent) {
@@ -54,6 +56,9 @@ export default function HomepageVideoSection({
       const message = event.data as { type?: string; value?: unknown; "x-tiktok-player"?: boolean };
       if (message?.["x-tiktok-player"] && message.type === "onMute") {
         setIsTikTokMuted(Boolean(message.value));
+      }
+      if (message?.["x-tiktok-player"] && message.type === "onStateChange") {
+        setIsTikTokPlaying(message.value === 1);
       }
     }
 
@@ -68,6 +73,19 @@ export default function HomepageVideoSection({
       "https://www.tiktok.com",
     );
     setIsTikTokMuted(nextMuted);
+  }
+
+  function toggleTikTokPlayback() {
+    const nextPlaying = !isTikTokPlaying;
+    tiktokPlayerRef.current?.contentWindow?.postMessage(
+      { type: nextPlaying ? "play" : "pause", "x-tiktok-player": true },
+      "https://www.tiktok.com",
+    );
+    setIsTikTokPlaying(nextPlaying);
+  }
+
+  function openTikTokFullscreen() {
+    tiktokFrameRef.current?.requestFullscreen().catch(() => {});
   }
 
   if (!url) return null;
@@ -109,24 +127,48 @@ export default function HomepageVideoSection({
                 </div>
 
                 {type === "tiktok" && tiktokId ? (
-                  <div className="relative mx-auto aspect-[9/16] max-h-[720px] max-w-[405px]">
-                    <button
-                      type="button"
-                      onClick={toggleTikTokSound}
-                      className="absolute right-4 top-4 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white text-hola-brown shadow-lg transition hover:scale-105 hover:bg-hola-yellow"
-                      aria-label={isTikTokMuted ? "Turn video sound on" : "Mute video"}
-                      title={isTikTokMuted ? "Turn sound on" : "Mute"}
-                    >
-                      {isTikTokMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-                    </button>
+                  <div ref={tiktokFrameRef} className="relative mx-auto aspect-[9/16] max-h-[720px] max-w-[405px] bg-black">
                     <iframe
                       ref={tiktokPlayerRef}
-                      src={`https://www.tiktok.com/player/v1/${tiktokId}?autoplay=1&loop=1&muted=1&controls=1&volume_control=0&rel=0`}
+                      src={`https://www.tiktok.com/player/v1/${tiktokId}?autoplay=1&loop=1&muted=1&controls=0&rel=0`}
                       title="HOLA Coffee TikTok video"
                       allow="autoplay; encrypted-media; picture-in-picture"
                       allowFullScreen
-                      className="h-full w-full border-0"
+                      tabIndex={-1}
+                      className="pointer-events-none h-full w-full border-0"
                     />
+                    <div className="absolute inset-x-4 bottom-4 z-30 flex items-center justify-center gap-2 rounded-full bg-black/70 p-2 text-white shadow-xl backdrop-blur">
+                      <button
+                        type="button"
+                        onClick={toggleTikTokPlayback}
+                        className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/20"
+                        aria-label={isTikTokPlaying ? "Pause video" : "Play video"}
+                        title={isTikTokPlaying ? "Pause" : "Play"}
+                      >
+                        {isTikTokPlaying ? <Pause className="h-5 w-5 fill-white" /> : <Play className="ml-0.5 h-5 w-5 fill-white" />}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={toggleTikTokSound}
+                        className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/20"
+                        aria-label={isTikTokMuted ? "Turn video sound on" : "Mute video"}
+                        title={isTikTokMuted ? "Turn sound on" : "Mute"}
+                      >
+                        {isTikTokMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                      </button>
+                      <div className="mx-1 h-1 flex-1 rounded-full bg-white/25">
+                        <div className="h-full w-1/3 rounded-full bg-hola-yellow" />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={openTikTokFullscreen}
+                        className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-white/20"
+                        aria-label="View video fullscreen"
+                        title="Fullscreen"
+                      >
+                        <Maximize className="h-5 w-5" />
+                      </button>
+                    </div>
                   </div>
                 ) : type === "tiktok" ? (
                   <a
